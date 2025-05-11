@@ -1,0 +1,98 @@
+### macOS ###
+# General macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails and metadata
+._*
+
+# macOS system folders/files
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Network share directories
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# iCloud files
+*.icloud
+
+### Swift & Xcode ###
+# Xcode and Swift related files
+
+# User settings
+xcuserdata/
+
+# Xcode build and derived data
+DerivedData/
+build/
+
+# Ignore source control files (Xcode)
+*.xcscmblueprint
+*.xccheckout
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Objective-C/Swift specific files
+*.hmap
+
+# App packaging files
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager files
+.build/
+Package.pins
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Carthage dependencies
+Carthage/Build/
+
+# Accio dependency management
+Dependencies/
+.accio/
+
+# fastlane-related files (optional)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection related files
+iOSInjectionProject/
+
+### Xcode Patch ###
+# Specific Xcode patch-related files
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+*.xcworkspace/
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# Kakao API Key
+BookFinder/Application/AppAPIKeys.swift
