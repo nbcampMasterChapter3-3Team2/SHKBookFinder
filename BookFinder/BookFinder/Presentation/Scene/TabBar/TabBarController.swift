@@ -9,8 +9,12 @@ import UIKit
 
 final class TabBarController: UITabBarController {
 
+    // MARK: - Properties
+
     private let searchTabViewController: SearchTabViewController
     private let bookListViewController: BookListViewController
+
+    // MARK: - Initializer, Deinit, requiered
 
     init(
         searchTabViewController: SearchTabViewController,
@@ -30,6 +34,8 @@ final class TabBarController: UITabBarController {
         configureTabBarItem()
         configureTabBarAppearance()
     }
+
+    // MARK: - Methods
 
     private func configureTabBarAppearance() {
         let appearance = UITabBarAppearance()
