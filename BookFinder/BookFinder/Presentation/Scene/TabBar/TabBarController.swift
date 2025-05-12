@@ -48,7 +48,7 @@ final class TabBarController: UITabBarController {
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-        
+
         tabBar.tintColor = .black
         tabBar.unselectedItemTintColor = .gray
     }
@@ -70,8 +70,8 @@ final class TabBarController: UITabBarController {
         )
 
         viewControllers = [
-            searchTabViewController,
-            bookListViewController
+            UINavigationController(rootViewController: searchTabViewController),
+            UINavigationController(rootViewController: bookListViewController)
         ]
     }
 }

@@ -20,6 +20,7 @@ final class SearchTabViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        self.navigationItem.titleView = searchBar
     }
 
     private func configureUI() {
@@ -27,11 +28,6 @@ final class SearchTabViewController: UIViewController {
             searchBar
         ]
             .forEach { view.addSubview($0) }
-
-        searchBar.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.directionalHorizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
-        }
     }
 }
 
