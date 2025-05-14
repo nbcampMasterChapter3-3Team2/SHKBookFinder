@@ -8,3 +8,7 @@
 enum SearchTapAction {
     case fetchSearchBookResult(String)
 }
+
+enum DetailAction {
+    case bindSelectedBook(BookEntity)
+}

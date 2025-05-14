@@ -8,7 +8,7 @@
 import RxSwift
 import RxCocoa
 
-final class SearchTabViewModel: SearchTabViewModelDelegate {
+final class SearchTabViewModel: ViewModelDelegate {
 
     // MARK: - typealias
 
@@ -19,7 +19,9 @@ final class SearchTabViewModel: SearchTabViewModelDelegate {
 
     var action: ((Action) -> Void)?
 
-    private var stateRelay: BehaviorRelay<ViewState>
+    private var stateRelay: BehaviorRelay<State>
+
+    var selectedBook = PublishSubject<BookEntity>()
 
     var state: Observable<ViewState> {
         return stateRelay.asObservable()

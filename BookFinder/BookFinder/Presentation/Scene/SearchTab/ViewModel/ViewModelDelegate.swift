@@ -7,7 +7,7 @@
 
 import RxSwift
 
-protocol SearchTabViewModelDelegate: AnyObject {
+protocol ViewModelDelegate: AnyObject {
     associatedtype Action
     associatedtype State
 

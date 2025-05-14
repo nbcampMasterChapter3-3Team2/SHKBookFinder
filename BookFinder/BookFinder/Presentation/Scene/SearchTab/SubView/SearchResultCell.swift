@@ -90,11 +90,12 @@ final class SearchResultCell: UICollectionViewCell {
 
     func configureComponent(with book: BookEntity) {
         self.titleLabel.text = book.title
+
         self.authorLabel.text = book.authors.joined(separator: " ")
+
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         guard let price = formatter.string(from: NSNumber(value: book.price)) else { return }
         self.priceLabel.text = "₩" + price
-        print(book.status)
     }
 }

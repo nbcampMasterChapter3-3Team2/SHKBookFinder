@@ -9,6 +9,7 @@ import UIKit
 import Then
 import SnapKit
 import RxSwift
+import RxCocoa
 
 final class SearchTabViewController: UIViewController {
     
@@ -107,6 +108,14 @@ final class SearchTabViewController: UIViewController {
                 self.currentState = state
                 self.collectionView.collectionView.reloadData()
             }).disposed(by: disposeBag)
+        
+        // CollectionView Cell - 클릭된 셀의 Book 모델 전송
+//        collectionView.collectionView.rx.modelSelected(BookEntity.self)
+//            .bind(to: viewModel.selectedBook)
+//            .disposed(by: disposeBag)
+
+        // Coordinator 을 통한 화면 전환
+        
     }
 
     private func dissmissKeyboardTapGesture() {

@@ -34,7 +34,7 @@ final class RecentlyViewdBookCell: UICollectionViewCell {
     // MARK: - Style Helper
 
     private func configureStyle() {
-        imageView.backgroundColor = .systemBlue
+        imageView.backgroundColor = .white
     }
 
     // MARK: - Hierarchy Helper

@@ -14,3 +14,7 @@ enum SearchState {
 struct ViewState {
     var fetchSearchBook: SearchState
 }
+
+enum DetailState {
+    case selectedBook(BookEntity)
+}
