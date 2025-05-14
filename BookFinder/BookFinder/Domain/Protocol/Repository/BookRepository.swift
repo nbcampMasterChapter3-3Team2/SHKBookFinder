@@ -1,0 +1,12 @@
+//
+//  BookRepository.swift
+//  BookFinder
+//
+//  Created by kingj on 5/13/25.
+//
+
+import RxSwift
+
+protocol BookRepository {
+    func fetchSearchResult(query: String) -> Single<[BookEntity]>
+}

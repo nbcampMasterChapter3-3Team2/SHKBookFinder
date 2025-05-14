@@ -15,12 +15,14 @@ final class Coordinator {
     private(set) var rootViewController: UIViewController?
 
     // MARK: - Initializer, Deinit, requiered
-    
+
     init(
         diContainer: DIContainer
     ) {
         self.diContainer = diContainer
     }
+
+    // MARK: - Methods
 
     func start() {
         let tabBarController = TabBarController(

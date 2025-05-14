@@ -8,27 +8,47 @@
 import UIKit
 import Then
 import SnapKit
+import RxSwift
 
 final class SearchTabViewController: UIViewController {
-
+    
     // MARK: - Properties
 
-    let data = [1, 2, 3, 4, 5, 6]
+    let viewModel: SearchTabViewModel
+    var currentState: ViewState
+    var disposeBag = DisposeBag()
 
     // MARK: - UI Components
 
     lazy var searchBar = UISearchBar().then {
-        $0.placeholder = "책 이름, 저자"
+        $0.placeholder = "책 이름"
         $0.setShowsCancelButton(false, animated: true)
         $0.searchBarStyle = .minimal
     }
 
     private let collectionView = CollectionView()
 
+    // MARK: - Initializer, Deinit, requiered
+
+    init(
+        viewModel: SearchTabViewModel
+    ) {
+        self.viewModel = viewModel
+        self.currentState = ViewState(
+            fetchSearchBook: .idle
+        )
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - View Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
         configureHierarchy()
         configureLayout()
         configureDelegate()
@@ -78,6 +98,16 @@ final class SearchTabViewController: UIViewController {
     }
 
     // MARK: - Methods
+
+    private func bind() {
+        viewModel.state
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] state in
+                guard let self else { return }
+                self.currentState = state
+                self.collectionView.collectionView.reloadData()
+            }).disposed(by: disposeBag)
+    }
 
     private func dissmissKeyboardTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dissmissKeyboard))

@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 extension SearchTabViewController: UICollectionViewDelegate {
 
@@ -26,13 +28,18 @@ extension SearchTabViewController: UISearchBarDelegate {
 
     // MARK: - Methods
 
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("input: \(searchText)")
-    }
-
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(false, animated: true)
         searchBar.resignFirstResponder()
+
+        searchBar.rx.text
+            .orEmpty
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] quary in
+                guard let self else { return }
+                viewModel.action?(.fetchSearchBookResult(quary))
+            }).disposed(by: disposeBag)
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
