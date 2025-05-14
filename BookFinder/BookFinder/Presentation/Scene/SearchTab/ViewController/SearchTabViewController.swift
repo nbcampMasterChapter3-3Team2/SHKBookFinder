@@ -7,10 +7,11 @@
 
 import UIKit
 
-final class SearchTapViewController: UIViewController {
+final class SearchTabViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
     }
 
 }

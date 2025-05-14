@@ -9,11 +9,7 @@
 /* Begin PBXBuildFile section */
 		B31B8D872DD0F79C00CA6F27 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8D862DD0F79C00CA6F27 /* SnapKit-Dynamic */; };
 		B31B8D8A2DD0F7CD00CA6F27 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8D892DD0F7CD00CA6F27 /* Then */; };
-		B31B8D942DD0F83100CA6F27 /* RxBlocking-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8D932DD0F83100CA6F27 /* RxBlocking-Dynamic */; };
-		B31B8D962DD0F83100CA6F27 /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8D952DD0F83100CA6F27 /* RxCocoa-Dynamic */; };
-		B31B8D982DD0F83100CA6F27 /* RxRelay-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8D972DD0F83100CA6F27 /* RxRelay-Dynamic */; };
-		B31B8D9A2DD0F83100CA6F27 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8D992DD0F83100CA6F27 /* RxSwift-Dynamic */; };
-		B31B8D9C2DD0F83100CA6F27 /* RxTest-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8D9B2DD0F83100CA6F27 /* RxTest-Dynamic */; };
+		B31B8DC62DD1B68A00CA6F27 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = B31B8DC52DD1B68A00CA6F27 /* RxSwift-Dynamic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,13 +71,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B31B8D962DD0F83100CA6F27 /* RxCocoa-Dynamic in Frameworks */,
-				B31B8D982DD0F83100CA6F27 /* RxRelay-Dynamic in Frameworks */,
-				B31B8D942DD0F83100CA6F27 /* RxBlocking-Dynamic in Frameworks */,
 				B31B8D872DD0F79C00CA6F27 /* SnapKit-Dynamic in Frameworks */,
-				B31B8D9A2DD0F83100CA6F27 /* RxSwift-Dynamic in Frameworks */,
+				B31B8DC62DD1B68A00CA6F27 /* RxSwift-Dynamic in Frameworks */,
 				B31B8D8A2DD0F7CD00CA6F27 /* Then in Frameworks */,
-				B31B8D9C2DD0F83100CA6F27 /* RxTest-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,11 +136,7 @@
 			packageProductDependencies = (
 				B31B8D862DD0F79C00CA6F27 /* SnapKit-Dynamic */,
 				B31B8D892DD0F7CD00CA6F27 /* Then */,
-				B31B8D932DD0F83100CA6F27 /* RxBlocking-Dynamic */,
-				B31B8D952DD0F83100CA6F27 /* RxCocoa-Dynamic */,
-				B31B8D972DD0F83100CA6F27 /* RxRelay-Dynamic */,
-				B31B8D992DD0F83100CA6F27 /* RxSwift-Dynamic */,
-				B31B8D9B2DD0F83100CA6F27 /* RxTest-Dynamic */,
+				B31B8DC52DD1B68A00CA6F27 /* RxSwift-Dynamic */,
 			);
 			productName = BookFinder;
 			productReference = B31B8D4A2DD0CFA800CA6F27 /* BookFinder.app */;
@@ -235,7 +223,7 @@
 			packageReferences = (
 				B31B8D852DD0F79C00CA6F27 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				B31B8D882DD0F7CD00CA6F27 /* XCRemoteSwiftPackageReference "Then" */,
-				B31B8D922DD0F83100CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				B31B8DC42DD1B68A00CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B31B8D4B2DD0CFA800CA6F27 /* Products */;
@@ -320,7 +308,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4F4VQHPY5W;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BookFinder/Info.plist;
+				INFOPLIST_FILE = BookFinder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -348,7 +336,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4F4VQHPY5W;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BookFinder/Info.plist;
+				INFOPLIST_FILE = BookFinder/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -616,7 +604,7 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		B31B8D922DD0F83100CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+		B31B8DC42DD1B68A00CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
 			requirement = {
@@ -637,30 +625,10 @@
 			package = B31B8D882DD0F7CD00CA6F27 /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
 		};
-		B31B8D932DD0F83100CA6F27 /* RxBlocking-Dynamic */ = {
+		B31B8DC52DD1B68A00CA6F27 /* RxSwift-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B31B8D922DD0F83100CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxBlocking-Dynamic";
-		};
-		B31B8D952DD0F83100CA6F27 /* RxCocoa-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B31B8D922DD0F83100CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxCocoa-Dynamic";
-		};
-		B31B8D972DD0F83100CA6F27 /* RxRelay-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B31B8D922DD0F83100CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxRelay-Dynamic";
-		};
-		B31B8D992DD0F83100CA6F27 /* RxSwift-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B31B8D922DD0F83100CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			package = B31B8DC42DD1B68A00CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = "RxSwift-Dynamic";
-		};
-		B31B8D9B2DD0F83100CA6F27 /* RxTest-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B31B8D922DD0F83100CA6F27 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxTest-Dynamic";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

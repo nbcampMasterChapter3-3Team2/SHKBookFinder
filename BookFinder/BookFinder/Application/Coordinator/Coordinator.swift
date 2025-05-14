@@ -1,0 +1,28 @@
+//
+//  Coordinator.swift
+//  BookFinder
+//
+//  Created by kingj on 5/12/25.
+//
+
+import UIKit
+
+final class Coordinator {
+
+    let diContainer: DIContainer
+    private(set) var rootViewController: UIViewController?
+
+    init(
+        diContainer: DIContainer
+    ) {
+        self.diContainer = diContainer
+    }
+
+    func start() {
+        let tabBarController = TabBarController(
+            searchTabViewController: diContainer.makeSearchTabViewController(),
+            bookListViewController: diContainer.makeBookListViewController()
+        )
+        self.rootViewController = tabBarController
+    }
+}
