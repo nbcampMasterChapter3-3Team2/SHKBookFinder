@@ -9,9 +9,13 @@ import UIKit
 
 final class Coordinator {
 
+    // MARK: - Properties
+
     let diContainer: DIContainer
     private(set) var rootViewController: UIViewController?
 
+    // MARK: - Initializer, Deinit, requiered
+    
     init(
         diContainer: DIContainer
     ) {

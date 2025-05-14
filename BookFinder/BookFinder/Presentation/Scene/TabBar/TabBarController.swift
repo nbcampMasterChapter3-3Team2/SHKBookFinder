@@ -9,8 +9,12 @@ import UIKit
 
 final class TabBarController: UITabBarController {
 
+    // MARK: - Properties
+
     private let searchTabViewController: SearchTabViewController
     private let bookListViewController: BookListViewController
+
+    // MARK: - Initializer, Deinit, requiered
 
     init(
         searchTabViewController: SearchTabViewController,
@@ -31,6 +35,8 @@ final class TabBarController: UITabBarController {
         configureTabBarAppearance()
     }
 
+    // MARK: - Methods
+
     private func configureTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -48,7 +54,7 @@ final class TabBarController: UITabBarController {
 
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-        
+
         tabBar.tintColor = .black
         tabBar.unselectedItemTintColor = .gray
     }
@@ -70,8 +76,8 @@ final class TabBarController: UITabBarController {
         )
 
         viewControllers = [
-            searchTabViewController,
-            bookListViewController
+            UINavigationController(rootViewController: searchTabViewController),
+            UINavigationController(rootViewController: bookListViewController)
         ]
     }
 }
