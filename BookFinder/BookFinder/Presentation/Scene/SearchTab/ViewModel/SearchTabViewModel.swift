@@ -39,9 +39,6 @@ final class SearchTabViewModel: ViewModelDelegate {
     // MARK: - Methods
 
     private func bindAction() {
-
-        // TODO: 왜 subscribe 아니고 bind 인지 확인
-
         action.bind { [weak self] action in
             guard let self else { return }
             switch action {
