@@ -6,17 +6,23 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 extension SearchTabViewController: UICollectionViewDelegate {
 
     // MARK: - Methods
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
         switch Section(rawValue: indexPath.section) {
-        case .recentlyViewedBook: return
+        case .recentlyViewedBook:
+            return
         case .searchResult:
-            let searchResultDetailVC = SearchResultDetailViewController()
-            present(searchResultDetailVC, animated: true)
+            let books = searchViewModel.state.bookResultSubject.value
+            let selectedBook = books[indexPath.item]
+
+            searchViewModel.action.accept(.bookResultCellTapped(selectedBook))
         default: return
         }
     }
@@ -25,10 +31,6 @@ extension SearchTabViewController: UICollectionViewDelegate {
 extension SearchTabViewController: UISearchBarDelegate {
 
     // MARK: - Methods
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("input: \(searchText)")
-    }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(false, animated: true)

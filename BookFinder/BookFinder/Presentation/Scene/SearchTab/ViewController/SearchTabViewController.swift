@@ -8,22 +8,42 @@
 import UIKit
 import Then
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class SearchTabViewController: UIViewController {
-
+    
     // MARK: - Properties
 
-    let data = [1, 2, 3, 4, 5, 6]
+    let searchViewModel: SearchTabViewModel
+    let detailViewModel: SearchResultDetailViewModel
+    let disposeBag = DisposeBag()
 
     // MARK: - UI Components
 
-    lazy var searchBar = UISearchBar().then {
-        $0.placeholder = "책 이름, 저자"
+    var searchBar = UISearchBar().then {
+        $0.placeholder = "책 이름"
         $0.setShowsCancelButton(false, animated: true)
         $0.searchBarStyle = .minimal
     }
 
     private let collectionView = CollectionView()
+
+    // MARK: - Initializer, Deinit, requiered
+
+    init(
+        searchViewModel: SearchTabViewModel,
+        detailViewModel: SearchResultDetailViewModel
+    ) {
+        self.searchViewModel = searchViewModel
+        self.detailViewModel = detailViewModel
+        super.init(nibName: nil, bundle: nil)
+        bind()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - View Life Cycle
 
@@ -45,6 +65,48 @@ final class SearchTabViewController: UIViewController {
         ]
             .forEach { view.addSubview($0) }
     }
+
+    // MARK: - Bind
+
+    private func bind() {
+        searchViewModel.state.bookResultSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] books in
+                guard let self else { return }
+                collectionView.collectionView.reloadData()
+            }, onError: { error in
+                print("[Error] Search Book Result: \(error)")
+            }).disposed(by: disposeBag)
+
+        searchViewModel.state.selectedBookSubject
+        // TODO: Thread 확인
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] book in
+                guard let self else { return }
+
+                let vc = SearchResultDetailViewController(viewModel: detailViewModel)
+                detailViewModel.action.accept(.bindSelectedBook(book))
+                present(vc, animated: true)
+            }, onError: { error in
+                print("[Error] Selected Book 전달: \(error)")
+            }).disposed(by: disposeBag)
+
+
+        searchBar.rx.text
+            .orEmpty
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] quary in
+                guard let self else { return }
+                searchViewModel.action.accept(.searchBookButtonTapped(quary))
+            }).disposed(by: disposeBag)
+
+        // TODO: [Refactor] CollectionView Cell - 클릭된 셀의 Book 모델 전송
+//        collectionView.collectionView.rx.modelSelected(BookEntity.self)
+//            .bind(to: viewModel.selectedBook)
+//            .disposed(by: disposeBag)
+    }
+
 
     // MARK: - Layout Helper
 
@@ -68,7 +130,7 @@ final class SearchTabViewController: UIViewController {
 
     private func configureDelegate() {
         collectionView.collectionView.delegate = self
-        searchBar.delegate = self
+        searchBar.rx.setDelegate(self)
     }
 
     // MARK: - DataSource Helper

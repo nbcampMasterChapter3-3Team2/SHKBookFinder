@@ -33,17 +33,27 @@ final class CollectionView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(collectionView)
-        collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+        configureHierarchy()
+        configureLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Hierarchy Helper
+
+    private func configureHierarchy() {
+        addSubview(collectionView)
+    }
+
     // MARK: - Layout Helper
+
+    private func configureLayout() {
+        collectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
 
     private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionIndex, environment in
@@ -59,8 +69,6 @@ final class CollectionView: UIView {
     }
 
     private func createRecentlyViewedBookLayout(_ environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
-        let containerWidth = environment.container.contentSize.width
-
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalWidth(1.0)

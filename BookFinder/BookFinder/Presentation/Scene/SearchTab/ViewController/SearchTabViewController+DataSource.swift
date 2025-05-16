@@ -16,7 +16,14 @@ extension SearchTabViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        switch Section(rawValue: section) {
+        case .recentlyViewedBook:
+            return 0
+        case .searchResult:
+            return searchViewModel.state.bookResultSubject.value.count
+        default:
+            return 0
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -27,11 +34,17 @@ extension SearchTabViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as! RecentlyViewdBookCell
             return cell
+
         case .searchResult:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: SearchResultCell.identifier,
                 for: indexPath
             ) as! SearchResultCell
+
+            let bookResult = searchViewModel.state.bookResultSubject.value
+            let book = bookResult[indexPath.item]
+
+            cell.configureComponent(with: book)
             return cell
         default:
             return UICollectionViewCell()
