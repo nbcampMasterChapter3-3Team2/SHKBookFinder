@@ -6,35 +6,40 @@
 //
 
 import RxSwift
+import RxRelay
 
 final class SearchResultDetailViewModel: ViewModelDelegate {
 
     // MARK: - typealias
 
-    typealias Action = DetailAction
-    typealias State = DetailState
+    enum DetailViewAction {
+        case bindSelectedBook(BookEntity)
+    }
+
+    struct DetailViewState {
+        var bindedBookSubject = BehaviorRelay<BookEntity?>(value: nil)
+    }
 
     // MARK: - Properties
 
-    var action: ((Action) -> Void)?
-    var disposeBag = DisposeBag()
-
-    var selectedBook = PublishSubject<BookEntity>()
+    private let disposeBag = DisposeBag()
+    var action = PublishRelay<DetailViewAction>()
+    var state = DetailViewState()
 
     // MARK: - Initializer, Deinit, requiered
 
     init() {
-        action = configureAction()
+        configureAction()
     }
 
     // MARK: - Methods
 
-    private func configureAction() -> ((Action) -> Void) {
-        { [weak self] action in
+    private func configureAction() {
+        action.bind { [weak self] action in
             guard let self else { return }
             switch action {
             case .bindSelectedBook(let book):
-                selectedBook.onNext(book)
+                state.bindedBookSubject.accept(book)
             }
         }
     }

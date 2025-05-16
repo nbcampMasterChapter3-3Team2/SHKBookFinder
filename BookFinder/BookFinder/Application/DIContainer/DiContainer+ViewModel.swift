@@ -9,4 +9,8 @@ extension DIContainer {
     func makeSearchTabViewModel() -> SearchTabViewModel {
         SearchTabViewModel(bookUseCase: makeBookUseCase())
     }
+
+    func makeSearchResultDetailViewModel() -> SearchResultDetailViewModel {
+        SearchResultDetailViewModel()
+    }
 }

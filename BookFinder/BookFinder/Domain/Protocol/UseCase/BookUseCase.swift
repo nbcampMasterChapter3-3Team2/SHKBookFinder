@@ -8,5 +8,5 @@
 import RxSwift
 
 protocol BookUseCase {
-    func fetchSearchResult(query: String) -> Single<[BookEntity]>
+    func fetchSearchResult(query: String) -> Observable<[BookEntity]>
 }

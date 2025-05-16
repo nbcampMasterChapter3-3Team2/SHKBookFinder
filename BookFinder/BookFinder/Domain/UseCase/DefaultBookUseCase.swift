@@ -21,7 +21,7 @@ final class DefaultBookUseCase: BookUseCase {
 
     // MARK: - Methods
 
-    func fetchSearchResult(query: String) -> Single<[BookEntity]> {
-        bookRepository.fetchSearchResult(query: query)
+    func fetchSearchResult(query: String) -> Observable<[BookEntity]> {
+        bookRepository.fetchSearchResult(query: query).asObservable()
     }
 }

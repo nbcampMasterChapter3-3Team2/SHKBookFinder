@@ -7,7 +7,10 @@
 
 extension DIContainer {
     func makeSearchTabViewController() -> SearchTabViewController {
-        SearchTabViewController(viewModel: makeSearchTabViewModel())
+        SearchTabViewController(
+            searchViewModel: makeSearchTabViewModel(),
+            detailViewModel: makeSearchResultDetailViewModel()
+        )
     }
 
     func makeBookListViewController() -> BookListViewController {

@@ -20,12 +20,7 @@ extension SearchTabViewController: UICollectionViewDataSource {
         case .recentlyViewedBook:
             return 0
         case .searchResult:
-            switch currentState.fetchSearchBook {
-            case .success(let books):
-                return books.count
-            case .idle, .error:
-                return 0
-            }
+            return searchViewModel.state.bookResultSubject.value.count
         default:
             return 0
         }
@@ -46,10 +41,10 @@ extension SearchTabViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as! SearchResultCell
 
-            if case .success(let books) = currentState.fetchSearchBook {
-                cell.configureComponent(with: books[indexPath.item])
-            }
+            let bookResult = searchViewModel.state.bookResultSubject.value
+            let book = bookResult[indexPath.item]
 
+            cell.configureComponent(with: book)
             return cell
         default:
             return UICollectionViewCell()

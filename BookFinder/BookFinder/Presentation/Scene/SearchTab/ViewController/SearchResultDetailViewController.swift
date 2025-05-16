@@ -14,13 +14,13 @@ class SearchResultDetailViewController: UIViewController {
     // MARK: - Properties
 
     private let viewModel: SearchResultDetailViewModel
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     // MARK: - UI Components
 
     private let detailView = SearchResultDetailView()
 
-    // MARK: - Initializer, Deinit, requiered
+    // MARK: - Initializer, requiered
 
     init(
         viewModel: SearchResultDetailViewModel
@@ -28,7 +28,7 @@ class SearchResultDetailViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -43,12 +43,24 @@ class SearchResultDetailViewController: UIViewController {
         bind()
     }
 
+    // MARK: - Bind
+
+    private func bind() {
+        viewModel.state.bindedBookSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] book in
+                guard let self, let book else { return }
+                detailView.configureComponent(with: book)
+            }, onError: { error in
+                print("[Error] Selected Book Bind \(error)")
+            }).disposed(by: disposeBag)
+    }
+
     // MARK: - Style Helper
 
     private func configureStyle() {
         view.backgroundColor = .white
     }
-
 
     // MARK: - Hierarchy Helper
 
@@ -65,18 +77,5 @@ class SearchResultDetailViewController: UIViewController {
         detailView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-    }
-
-    // MARK: - Methods
-
-    private func bind() {
-        viewModel.selectedBook
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] book in
-                guard let self else { return }
-                detailView.configureComponent(with: book)
-            }, onError: { error in
-                print("Selected Book bind \(error)")
-            }).disposed(by: disposeBag)
     }
 }

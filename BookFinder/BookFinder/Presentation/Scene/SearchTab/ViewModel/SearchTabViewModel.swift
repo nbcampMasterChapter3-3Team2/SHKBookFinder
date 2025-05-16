@@ -6,30 +6,26 @@
 //
 
 import RxSwift
-import RxCocoa
+import RxRelay
 
 final class SearchTabViewModel: ViewModelDelegate {
 
-    // MARK: - typealias
+    enum Action {
+        case searchBookButtonTapped(String)
+        case bookResultCellTapped(BookEntity)
+    }
 
-    typealias Action = SearchTapAction
-    typealias State = ViewState
+    struct State {
+        let bookResultSubject = BehaviorRelay<[BookEntity]>(value: [])
+        let selectedBookSubject = PublishRelay<BookEntity>()
+    }
 
     // MARK: - Properties
 
-    var action: ((Action) -> Void)?
-
-    private var stateRelay: BehaviorRelay<State>
-
-    var selectedBook = PublishSubject<BookEntity>()
-
-    var state: Observable<ViewState> {
-        return stateRelay.asObservable()
-    }
-
-    private(set) var disposeBag = DisposeBag()
-
     private let bookUseCase: BookUseCase
+    private let disposeBag = DisposeBag()
+    var action = PublishRelay<Action>()
+    var state = State()
 
     // MARK: - Initializer, Deinit, requiered
 
@@ -37,52 +33,35 @@ final class SearchTabViewModel: ViewModelDelegate {
         bookUseCase: BookUseCase
     ) {
         self.bookUseCase = bookUseCase
-
-        stateRelay = BehaviorRelay(
-            value:
-                ViewState(
-                    fetchSearchBook: .idle
-                )
-        )
-        action = configureAction()
+        bindAction()
     }
 
     // MARK: - Methods
 
-    private func configureAction() -> ((Action) -> Void) {
-        { [weak self] action in
+    private func bindAction() {
+
+        // TODO: 왜 subscribe 아니고 bind 인지 확인
+
+        action.bind { [weak self] action in
             guard let self else { return }
             switch action {
-            case .fetchSearchBookResult(let quary):
-                fetchSearchBookResult(quary: quary)
+            case .searchBookButtonTapped(let query):
+                fetchSearchBookResult(quary: query)
+            case .bookResultCellTapped(let book):
+                bookResultCellTapped(book)
             }
-        }
+        }.disposed(by: disposeBag)
+    }
+
+    private func bookResultCellTapped(_ book: BookEntity) {
+        state.selectedBookSubject.accept(book)
     }
 
     private func fetchSearchBookResult(quary: String) {
         bookUseCase.fetchSearchResult(query: quary)
-            .subscribe { [weak self] result in
+            .subscribe { [weak self] books in
                 guard let self else { return }
-                switch result {
-                case .success(let books):
-                    // 현재의 ViewState 꺼내기
-                    let currentState = stateRelay.value
-
-                    // 필요한 ViewState 상태 변경
-                    var newState = currentState
-                    newState.fetchSearchBook = .success(books)
-                    stateRelay.accept(newState)
-
-                case .failure(let error):
-                    let currentState = stateRelay.value
-
-                    var newState = currentState
-                    newState.fetchSearchBook = .error(error)
-
-                    stateRelay.accept(newState)
-
-                    print("Error: \(error.localizedDescription)")
-                }
-        }.disposed(by: disposeBag)
+                state.bookResultSubject.accept(books)
+            }.disposed(by: disposeBag)
     }
 }

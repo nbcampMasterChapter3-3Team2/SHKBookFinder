@@ -15,13 +15,13 @@ final class SearchTabViewController: UIViewController {
     
     // MARK: - Properties
 
-    let viewModel: SearchTabViewModel
-    var currentState: ViewState
-    var disposeBag = DisposeBag()
+    let searchViewModel: SearchTabViewModel
+    let detailViewModel: SearchResultDetailViewModel
+    let disposeBag = DisposeBag()
 
     // MARK: - UI Components
 
-    lazy var searchBar = UISearchBar().then {
+    var searchBar = UISearchBar().then {
         $0.placeholder = "책 이름"
         $0.setShowsCancelButton(false, animated: true)
         $0.searchBarStyle = .minimal
@@ -32,13 +32,13 @@ final class SearchTabViewController: UIViewController {
     // MARK: - Initializer, Deinit, requiered
 
     init(
-        viewModel: SearchTabViewModel
+        searchViewModel: SearchTabViewModel,
+        detailViewModel: SearchResultDetailViewModel
     ) {
-        self.viewModel = viewModel
-        self.currentState = ViewState(
-            fetchSearchBook: .idle
-        )
+        self.searchViewModel = searchViewModel
+        self.detailViewModel = detailViewModel
         super.init(nibName: nil, bundle: nil)
+        bind()
     }
 
     required init?(coder: NSCoder) {
@@ -49,7 +49,6 @@ final class SearchTabViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        bind()
         configureHierarchy()
         configureLayout()
         configureDelegate()
@@ -66,6 +65,48 @@ final class SearchTabViewController: UIViewController {
         ]
             .forEach { view.addSubview($0) }
     }
+
+    // MARK: - Bind
+
+    private func bind() {
+        searchViewModel.state.bookResultSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] books in
+                guard let self else { return }
+                collectionView.collectionView.reloadData()
+            }, onError: { error in
+                print("[Error] Search Book Result: \(error)")
+            }).disposed(by: disposeBag)
+
+        searchViewModel.state.selectedBookSubject
+        // TODO: Thread 확인
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] book in
+                guard let self else { return }
+
+                let vc = SearchResultDetailViewController(viewModel: detailViewModel)
+                detailViewModel.action.accept(.bindSelectedBook(book))
+                present(vc, animated: true)
+            }, onError: { error in
+                print("[Error] Selected Book 전달: \(error)")
+            }).disposed(by: disposeBag)
+
+
+        searchBar.rx.text
+            .orEmpty
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] quary in
+                guard let self else { return }
+                searchViewModel.action.accept(.searchBookButtonTapped(quary))
+            }).disposed(by: disposeBag)
+
+        // TODO: [Refactor] CollectionView Cell - 클릭된 셀의 Book 모델 전송
+//        collectionView.collectionView.rx.modelSelected(BookEntity.self)
+//            .bind(to: viewModel.selectedBook)
+//            .disposed(by: disposeBag)
+    }
+
 
     // MARK: - Layout Helper
 
@@ -89,7 +130,7 @@ final class SearchTabViewController: UIViewController {
 
     private func configureDelegate() {
         collectionView.collectionView.delegate = self
-        searchBar.delegate = self
+        searchBar.rx.setDelegate(self)
     }
 
     // MARK: - DataSource Helper
@@ -99,24 +140,6 @@ final class SearchTabViewController: UIViewController {
     }
 
     // MARK: - Methods
-
-    private func bind() {
-        viewModel.state
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] state in
-                guard let self else { return }
-                self.currentState = state
-                self.collectionView.collectionView.reloadData()
-            }).disposed(by: disposeBag)
-        
-        // CollectionView Cell - 클릭된 셀의 Book 모델 전송
-//        collectionView.collectionView.rx.modelSelected(BookEntity.self)
-//            .bind(to: viewModel.selectedBook)
-//            .disposed(by: disposeBag)
-
-        // Coordinator 을 통한 화면 전환
-        
-    }
 
     private func dissmissKeyboardTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dissmissKeyboard))

@@ -6,11 +6,12 @@
 //
 
 import RxSwift
+import RxRelay
 
 protocol ViewModelDelegate: AnyObject {
     associatedtype Action
     associatedtype State
 
-    var action: ((Action) -> Void)? { get }
-    var disposeBag: DisposeBag { get }
+    var action: PublishRelay<Action> { get }
+    var state: State { get set }
 }
