@@ -154,5 +154,4 @@ final class SearchTabViewController: UIViewController {
         searchBar.resignFirstResponder()
         searchBar.setShowsCancelButton(false, animated: true)
     }
-
 }

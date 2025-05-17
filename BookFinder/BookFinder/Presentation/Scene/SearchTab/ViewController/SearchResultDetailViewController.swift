@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import RxSwift
+import RxCocoa
 
 class SearchResultDetailViewController: UIViewController {
 
@@ -40,6 +41,7 @@ class SearchResultDetailViewController: UIViewController {
         configureStyle()
         configureHierarchy()
         configureLayout()
+        configureDelegate()
         bind()
     }
 
@@ -54,6 +56,16 @@ class SearchResultDetailViewController: UIViewController {
             }, onError: { error in
                 print("[Error] Selected Book Bind \(error)")
             }).disposed(by: disposeBag)
+
+        detailView.closeButton.rx.tap
+            .map { DetailViewAction.closeTapped }
+            .bind(to: viewModel.action)
+            .disposed(by: disposeBag)
+
+        detailView.addButton.rx.tap
+            .map { DetailViewAction.addTapped }
+            .bind(to: viewModel.action)
+            .disposed(by: disposeBag)
     }
 
     // MARK: - Style Helper
@@ -77,5 +89,11 @@ class SearchResultDetailViewController: UIViewController {
         detailView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+
+    // MARK: - Delegate Helper
+
+    private func configureDelegate() {
+        viewModel.delegate = self
     }
 }
