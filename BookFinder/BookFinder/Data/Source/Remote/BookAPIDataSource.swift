@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class BookDataSource {
+final class BookAPIDataSource {
 
     // MARK: - Properties
 

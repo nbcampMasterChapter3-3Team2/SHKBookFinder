@@ -7,6 +7,9 @@
 
 extension DIContainer {
     func makeBookRepository() -> BookRepository {
-        DefaultBookRepository(bookDataSource: makeBookDataSource())
+        DefaultBookRepository(
+            bookDataSource: makeBookDataSource(),
+            bookLocalDataSource: makeBookLocalDataSource()
+        )
     }
 }

@@ -9,4 +9,5 @@ import RxSwift
 
 protocol BookRepository {
     func fetchSearchResult(query: String) -> Single<[BookEntity]>
+    func saveMyBook(_ receivedBook: BookEntity) -> Bool
 }

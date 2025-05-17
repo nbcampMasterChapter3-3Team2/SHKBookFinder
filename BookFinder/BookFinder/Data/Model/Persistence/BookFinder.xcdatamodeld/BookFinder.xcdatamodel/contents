@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D70" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Book" representedClassName="Book" syncable="YES">
+        <attribute name="authors" attributeType="Transformable"/>
+        <attribute name="contents" attributeType="String"/>
+        <attribute name="datetime" attributeType="String"/>
+        <attribute name="isbn" attributeType="String"/>
+        <attribute name="price" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="publisher" attributeType="String"/>
+        <attribute name="sale_price" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="status" attributeType="String"/>
+        <attribute name="thumbnail" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="translators" attributeType="Transformable"/>
+        <attribute name="url" attributeType="String"/>
+    </entity>
+    <entity name="MyBook" representedClassName="MyBook" syncable="YES">
+        <attribute name="savedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book"/>
+    </entity>
+    <entity name="RecentlyViewedBook" representedClassName="RecentlyViewedBook" syncable="YES">
+        <attribute name="viewedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book"/>
+    </entity>
 </model>

@@ -24,4 +24,8 @@ final class DefaultBookUseCase: BookUseCase {
     func fetchSearchResult(query: String) -> Observable<[BookEntity]> {
         bookRepository.fetchSearchResult(query: query).asObservable()
     }
+
+    func saveMyBook(_ receivedBook: BookEntity) -> Bool {
+        bookRepository.saveMyBook(receivedBook)
+    }
 }

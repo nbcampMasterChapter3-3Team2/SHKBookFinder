@@ -6,7 +6,11 @@
 //
 
 extension DIContainer {
-    func makeBookDataSource() -> BookDataSource {
-        BookDataSource(apiKey: AppAPIKeys.kakaoAPIKey)
+    func makeBookDataSource() -> BookAPIDataSource {
+        BookAPIDataSource(apiKey: AppAPIKeys.kakaoAPIKey)
+    }
+
+    func makeBookLocalDataSource() -> BookLocalDataSource {
+        BookLocalDataSource(persistenceController: persistenceController)
     }
 }

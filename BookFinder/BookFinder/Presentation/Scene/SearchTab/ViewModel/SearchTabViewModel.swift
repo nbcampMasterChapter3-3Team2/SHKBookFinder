@@ -8,7 +8,7 @@
 import RxSwift
 import RxRelay
 
-final class SearchTabViewModel: ViewModelDelegate {
+final class SearchTabViewModel: ViewModelType {
 
     enum Action {
         case searchBookButtonTapped(String)

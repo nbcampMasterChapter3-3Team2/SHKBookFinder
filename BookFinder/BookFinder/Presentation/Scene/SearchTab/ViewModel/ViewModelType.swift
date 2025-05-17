@@ -8,7 +8,7 @@
 import RxSwift
 import RxRelay
 
-protocol ViewModelDelegate: AnyObject {
+protocol ViewModelType: AnyObject {
     associatedtype Action
     associatedtype State
 

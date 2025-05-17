@@ -9,4 +9,5 @@ import RxSwift
 
 protocol BookUseCase {
     func fetchSearchResult(query: String) -> Observable<[BookEntity]>
+    func saveMyBook(_ receivedBook: BookEntity) -> Bool
 }

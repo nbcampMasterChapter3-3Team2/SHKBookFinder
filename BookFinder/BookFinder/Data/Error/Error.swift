@@ -11,3 +11,10 @@ enum NetworkError: Error {
     case decodingFail
     case unknowned
 }
+
+enum CoreDataError: Error {
+    case saveFail
+    case updateFail
+    case deleteFail
+    case unknowned
+}

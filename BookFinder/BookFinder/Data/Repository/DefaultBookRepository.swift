@@ -9,12 +9,17 @@ import RxSwift
 
 final class DefaultBookRepository: BookRepository {
 
-    private let bookDataSource: BookDataSource
+    private let bookDataSource: BookAPIDataSource
+    private let bookLocalDataSource: BookLocalDataSource
 
     private let mapper = BookResponseMapper.shared
 
-    init(bookDataSource: BookDataSource) {
+    init(
+        bookDataSource: BookAPIDataSource,
+        bookLocalDataSource: BookLocalDataSource
+    ) {
         self.bookDataSource = bookDataSource
+        self.bookLocalDataSource = bookLocalDataSource
     }
 
     func fetchSearchResult(query: String) -> Single<[BookEntity]> {
@@ -23,5 +28,9 @@ final class DefaultBookRepository: BookRepository {
                 guard let self else { return [] }
                 return bookAPIResponse.documents.map { self.mapper.map(from: $0) }
             }
+    }
+
+    func saveMyBook(_ receivedBook: BookEntity) -> Bool {
+        bookLocalDataSource.saveMyBook(receivedBook)
     }
 }

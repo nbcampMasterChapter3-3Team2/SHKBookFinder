@@ -8,7 +8,7 @@
 import RxSwift
 import RxRelay
 
-final class SearchResultDetailViewModel: ViewModelDelegate {
+final class SearchResultDetailViewModel: ViewModelType {
 
     // MARK: - typealias
 
