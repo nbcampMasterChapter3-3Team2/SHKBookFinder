@@ -9,14 +9,14 @@
 import Foundation
 import CoreData
 
-public extension RecentlyViewedBook {
+extension RecentlyViewedBook {
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<RecentlyViewedBook> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<RecentlyViewedBook> {
         return NSFetchRequest<RecentlyViewedBook>(entityName: "RecentlyViewedBook")
     }
 
-    @NSManaged var viewedAt: Date
-    @NSManaged var book: Book
+    @NSManaged public var viewedAt: Date
+    @NSManaged public var book: Book
 
 }
 

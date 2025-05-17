@@ -9,14 +9,14 @@
 import Foundation
 import CoreData
 
-public extension MyBook {
+extension MyBook {
 
-    @nonobjc class func fetchRequest() -> NSFetchRequest<MyBook> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<MyBook> {
         return NSFetchRequest<MyBook>(entityName: "MyBook")
     }
 
-    @NSManaged var savedAt: Date
-    @NSManaged var book: Book
+    @NSManaged public var savedAt: Date
+    @NSManaged public var book: Book
 }
 
 extension MyBook : Identifiable {}
