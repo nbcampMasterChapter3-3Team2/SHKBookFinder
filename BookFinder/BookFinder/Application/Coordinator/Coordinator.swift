@@ -27,7 +27,7 @@ final class Coordinator {
     func start() {
         let tabBarController = TabBarController(
             searchTabViewController: diContainer.makeSearchTabViewController(),
-            bookListViewController: diContainer.makeBookListViewController()
+            myBookViewController: diContainer.makeBookListViewController()
         )
         self.rootViewController = tabBarController
     }

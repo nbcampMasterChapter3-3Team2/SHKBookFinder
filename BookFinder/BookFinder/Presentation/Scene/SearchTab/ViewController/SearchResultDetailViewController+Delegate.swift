@@ -10,7 +10,10 @@ extension SearchResultDetailViewController: SearchResultDetailViewModelDelegate 
         dismiss(animated: true, completion: nil)
     }
     
-    func didTapAddBook() {
-        print("did tap add book !!")
+    func didTapAddBook(_ result: Bool) {
+
+        // TODO: result에 따른 Alert
+
+        didRequestDismiss()
     }
 }

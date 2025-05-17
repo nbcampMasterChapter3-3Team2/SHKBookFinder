@@ -13,7 +13,7 @@ extension DIContainer {
         )
     }
 
-    func makeBookListViewController() -> BookListViewController {
-        BookListViewController()
+    func makeBookListViewController() -> MyBookViewController {
+        MyBookViewController(viewModel: makeMyBookViewModel())
     }
 }

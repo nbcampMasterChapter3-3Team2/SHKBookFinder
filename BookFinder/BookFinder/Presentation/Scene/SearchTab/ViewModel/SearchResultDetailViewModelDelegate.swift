@@ -7,5 +7,5 @@
 
 protocol SearchResultDetailViewModelDelegate: AnyObject {
     func didRequestDismiss()
-    func didTapAddBook()
+    func didTapAddBook(_ result: Bool)
 }

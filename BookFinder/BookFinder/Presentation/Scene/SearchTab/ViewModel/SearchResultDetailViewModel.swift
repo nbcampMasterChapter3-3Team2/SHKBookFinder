@@ -22,14 +22,20 @@ final class SearchResultDetailViewModel: ViewModelType {
 
     // MARK: - Properties
 
-    private let disposeBag = DisposeBag()
     var action = PublishRelay<DetailViewAction>()
     var state = DetailViewState()
+    private let disposeBag = DisposeBag()
+
     weak var delegate: SearchResultDetailViewModelDelegate?
+
+    private let bookUseCase: BookUseCase
 
     // MARK: - Initializer, Deinit, requiered
 
-    init() {
+    init(
+        bookUseCase: BookUseCase
+    ) {
+        self.bookUseCase = bookUseCase
         configureAction()
     }
 
@@ -46,9 +52,10 @@ final class SearchResultDetailViewModel: ViewModelType {
             case .addTapped:
 
                 // TODO: UseCase 연결 -> 코어데이터 저장
-                // TODO: Dismiss
+                guard let book = state.bindedBookSubject.value else { return}
+                let result = bookUseCase.saveMyBook(book)
 
-                self.delegate?.didTapAddBook()
+                self.delegate?.didTapAddBook(result)
             }
         }
     }
