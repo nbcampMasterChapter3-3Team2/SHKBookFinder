@@ -20,7 +20,7 @@ class MyBookCell: UITableViewCell {
     private var titleLabel = UILabel().then {
         $0.font = .boldSystemFont(ofSize: 15)
         $0.textColor = .black
-        $0.numberOfLines = 0
+        $0.numberOfLines = 3
         $0.setContentCompressionResistancePriority(
             .defaultLow,
             for: .horizontal
