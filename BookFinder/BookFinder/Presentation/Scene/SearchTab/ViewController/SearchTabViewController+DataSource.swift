@@ -12,30 +12,31 @@ extension SearchTabViewController: UICollectionViewDataSource {
     // MARK: - Methods
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return Section.allCases.count
+        return searchViewModel.state.collectionViewSection.value.count
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch Section(rawValue: section) {
-        case .recentlyViewedBook:
-            return 0
-        case .searchResult:
+        let section = searchViewModel.state.collectionViewSection.value[section]
+
+        if section == .recentlyViewedBook {
+            return searchViewModel.state.recentBooksSubject.value.count
+        } else {
             return searchViewModel.state.bookResultSubject.value.count
-        default:
-            return 0
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch Section(rawValue: indexPath.section) {
-        case .recentlyViewedBook:
+        let section = searchViewModel.state.collectionViewSection.value[indexPath.section]
+
+        if section == .recentlyViewedBook {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: RecentlyViewdBookCell.identifier,
                 for: indexPath
             ) as! RecentlyViewdBookCell
             return cell
+        }
 
-        case .searchResult:
+        if section == .searchResult {
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: SearchResultCell.identifier,
                 for: indexPath
@@ -46,9 +47,9 @@ extension SearchTabViewController: UICollectionViewDataSource {
 
             cell.configureComponent(with: book)
             return cell
-        default:
-            return UICollectionViewCell()
         }
+
+        return UICollectionViewCell()
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -59,7 +60,7 @@ extension SearchTabViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as! HeaderView
 
-            let sectionType = Section.allCases[indexPath.section]
+            let sectionType = searchViewModel.state.collectionViewSection.value[indexPath.section]
             header.configureTitle(sectionType.title)
             return header
         }

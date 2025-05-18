@@ -15,7 +15,7 @@ enum DetailViewAction {
 }
 
 struct DetailViewState {
-    var bindedBookSubject = BehaviorRelay<BookEntity?>(value: nil)
+    let bindedBookSubject = BehaviorRelay<BookEntity?>(value: nil)
 }
 
 final class SearchResultDetailViewModel: ViewModelType {

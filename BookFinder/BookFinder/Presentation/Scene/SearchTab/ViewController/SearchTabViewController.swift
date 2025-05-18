@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 
 final class SearchTabViewController: UIViewController {
-    
+
     // MARK: - Properties
 
     let searchViewModel: SearchTabViewModel
@@ -53,6 +53,7 @@ final class SearchTabViewController: UIViewController {
         configureLayout()
         configureDelegate()
         configureDataSource()
+        searchViewModel.action.accept(.viewDidLoad)
         dissmissKeyboardTapGesture()
     }
 
@@ -79,7 +80,6 @@ final class SearchTabViewController: UIViewController {
             }).disposed(by: disposeBag)
 
         searchViewModel.state.selectedBookSubject
-        // TODO: Thread 확인
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] book in
                 guard let self else { return }
@@ -89,6 +89,17 @@ final class SearchTabViewController: UIViewController {
                 present(vc, animated: true)
             }, onError: { error in
                 print("[Error] Selected Book 전달: \(error)")
+            }).disposed(by: disposeBag)
+
+        searchViewModel.state.collectionViewSection
+            .subscribe(onNext: { [weak self] sections in
+                guard let self else { return }
+                collectionView.sections = sections
+            }).disposed(by: disposeBag)
+
+        searchViewModel.state.recentBooksSubject
+            .subscribe(onNext: { [weak self] recentBooks in
+
             }).disposed(by: disposeBag)
 
 

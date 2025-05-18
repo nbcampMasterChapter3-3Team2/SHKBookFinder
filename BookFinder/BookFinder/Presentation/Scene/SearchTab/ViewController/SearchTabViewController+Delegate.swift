@@ -15,15 +15,16 @@ extension SearchTabViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        switch Section(rawValue: indexPath.section) {
-        case .recentlyViewedBook:
-            return
-        case .searchResult:
+        let section = searchViewModel.state.collectionViewSection.value[indexPath.section]
+
+        if section == .recentlyViewedBook {
+        }
+
+        if section == .searchResult {
             let books = searchViewModel.state.bookResultSubject.value
             let selectedBook = books[indexPath.item]
 
             searchViewModel.action.accept(.bookResultCellTapped(selectedBook))
-        default: return
         }
     }
 }

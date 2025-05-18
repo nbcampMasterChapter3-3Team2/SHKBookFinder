@@ -11,6 +11,7 @@ import RxRelay
 final class SearchTabViewModel: ViewModelType {
 
     enum Action {
+        case viewDidLoad
         case searchBookButtonTapped(String)
         case bookResultCellTapped(BookEntity)
     }
@@ -18,6 +19,8 @@ final class SearchTabViewModel: ViewModelType {
     struct State {
         let bookResultSubject = BehaviorRelay<[BookEntity]>(value: [])
         let selectedBookSubject = PublishRelay<BookEntity>()
+        let collectionViewSection = BehaviorRelay<[Section]>(value: [.searchResult])
+        let recentBooksSubject = BehaviorRelay<[BookEntity]>(value: [])
     }
 
     // MARK: - Properties
@@ -42,6 +45,8 @@ final class SearchTabViewModel: ViewModelType {
         action.bind { [weak self] action in
             guard let self else { return }
             switch action {
+            case .viewDidLoad:
+                configureSection()
             case .searchBookButtonTapped(let query):
                 fetchSearchBookResult(quary: query)
             case .bookResultCellTapped(let book):
@@ -50,8 +55,20 @@ final class SearchTabViewModel: ViewModelType {
         }.disposed(by: disposeBag)
     }
 
+    private func configureSection() {
+        var result: [Section] = []
+        if !state.recentBooksSubject.value.isEmpty {
+            result.append(.recentlyViewedBook)
+        }
+        result.append(.searchResult)
+
+        state.collectionViewSection.accept(result)
+    }
+
     private func bookResultCellTapped(_ book: BookEntity) {
         state.selectedBookSubject.accept(book)
+
+        // TODO: recentBooksSubject accept(book)
     }
 
     private func fetchSearchBookResult(quary: String) {

@@ -16,8 +16,8 @@ enum MyBookAction {
 }
 
 struct MyBookState {
-    var myBooksSubject = BehaviorRelay<[MyBookEntity]>(value: [])
-    var deleteAllSuccess = PublishRelay<Void>()
+    let myBooksSubject = BehaviorRelay<[MyBookEntity]>(value: [])
+    let deleteAllSuccess = PublishRelay<Void>()
 }
 
 final class MyBookViewModel: ViewModelType {
