@@ -99,9 +99,9 @@ final class SearchTabViewController: UIViewController {
 
         searchViewModel.state.recentBooksSubject
             .subscribe(onNext: { [weak self] recentBooks in
-
+                guard let self else { return }
+                collectionView.collectionView.reloadData()
             }).disposed(by: disposeBag)
-
 
         searchBar.rx.text
             .orEmpty

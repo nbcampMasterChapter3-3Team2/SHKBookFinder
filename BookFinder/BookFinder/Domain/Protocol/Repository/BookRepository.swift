@@ -13,4 +13,6 @@ protocol BookRepository {
     func fetchMyBooks() -> Single<[MyBookEntity]>
     func deleteAllMyBooks() -> Completable
     func deleteBook(isbn: String) -> Completable
+    func addRecentBook(_ book: BookEntity) -> Completable
+    func fetchRecentBooks() -> Observable<[BookEntity]>
 }

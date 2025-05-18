@@ -14,7 +14,7 @@ final class SearchCollectionView: UIView {
 
     var sections: [Section] = [] {
         didSet {
-            collectionView.setCollectionViewLayout(createCompositionalLayout(sections: sections), animated: false)
+            collectionView.setCollectionViewLayout(createCompositionalLayout(sections: sections), animated: true)
         }
     }
 
@@ -98,7 +98,7 @@ final class SearchCollectionView: UIView {
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(60)
+            heightDimension: .absolute(80)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,

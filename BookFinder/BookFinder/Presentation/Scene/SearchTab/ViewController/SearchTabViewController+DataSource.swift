@@ -33,6 +33,11 @@ extension SearchTabViewController: UICollectionViewDataSource {
                 withReuseIdentifier: RecentlyViewdBookCell.identifier,
                 for: indexPath
             ) as! RecentlyViewdBookCell
+
+            let recentBooks = searchViewModel.state.recentBooksSubject.value
+            let book = recentBooks[indexPath.item]
+            cell.configureComponent(with: book)
+            cell.layer.cornerRadius = 70 / 2
             return cell
         }
 

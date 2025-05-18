@@ -45,4 +45,13 @@ final class DefaultBookRepository: BookRepository {
     func deleteBook(isbn: String) -> Completable {
         bookLocalDataSource.deleteBook(isbn: isbn)
     }
+
+    func addRecentBook(_ book: BookEntity) -> Completable {
+        bookLocalDataSource.addRecentBook(book)
+    }
+
+    func fetchRecentBooks() -> Observable<[BookEntity]> {
+        bookLocalDataSource.fetchRecentBooks()
+    }
+
 }

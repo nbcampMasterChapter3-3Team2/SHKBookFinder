@@ -50,8 +50,6 @@ final class SearchResultDetailViewModel: ViewModelType {
             case .closeTapped:
                 self.delegate?.didRequestDismiss()
             case .addTapped:
-
-                // TODO: UseCase 연결 -> 코어데이터 저장
                 guard let book = state.bindedBookSubject.value else { return}
                 let result = bookUseCase.saveMyBook(book)
 

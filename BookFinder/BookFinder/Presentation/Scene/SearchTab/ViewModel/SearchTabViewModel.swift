@@ -46,11 +46,13 @@ final class SearchTabViewModel: ViewModelType {
             guard let self else { return }
             switch action {
             case .viewDidLoad:
+                fetchRecentBooks()
                 configureSection()
             case .searchBookButtonTapped(let query):
                 fetchSearchBookResult(quary: query)
             case .bookResultCellTapped(let book):
                 bookResultCellTapped(book)
+                configureSection()
             }
         }.disposed(by: disposeBag)
     }
@@ -65,10 +67,29 @@ final class SearchTabViewModel: ViewModelType {
         state.collectionViewSection.accept(result)
     }
 
+    private func fetchRecentBooks() {
+        bookUseCase.fetchRecentBooks()
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] books in
+                guard let self else { return }
+                state.recentBooksSubject.accept(books)
+            }).disposed(by: disposeBag)
+    }
+
     private func bookResultCellTapped(_ book: BookEntity) {
+        // 선택된 셀의 BookEntity 업데이트
         state.selectedBookSubject.accept(book)
 
-        // TODO: recentBooksSubject accept(book)
+        // recentlyViewedBook Section 데이터 업데이트
+        //   1. 선택된 셀의 BookEntity -> CoreData 에 추가
+        //   2. update 된 모든 최근 본 책 fetch
+        bookUseCase.addRecentBook(book)
+            .andThen(bookUseCase.fetchRecentBooks())
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] books in
+                guard let self else { return }
+                state.recentBooksSubject.accept(books)
+            }).disposed(by: disposeBag)
     }
 
     private func fetchSearchBookResult(quary: String) {

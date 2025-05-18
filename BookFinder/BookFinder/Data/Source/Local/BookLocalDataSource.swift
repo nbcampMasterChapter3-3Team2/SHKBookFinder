@@ -55,20 +55,7 @@ final class BookLocalDataSource {
                 }
             } else {
                 // Book이 없음 -> 새 Book + 새 MyBook CREATE
-                let newBook = Book(context: context)
-                newBook.title = receivedBook.title
-                newBook.contents = receivedBook.contents
-                newBook.url = receivedBook.url
-                newBook.isbn = receivedBook.isbn
-                newBook.datetime = receivedBook.datetime
-                newBook.authors = receivedBook.authors
-                newBook.publisher = receivedBook.publisher
-                newBook.translators = receivedBook.translators ?? []
-                newBook.price = Int32(receivedBook.price)
-                newBook.sale_price = Int32(receivedBook.salePrice)
-                newBook.thumbnail = receivedBook.thumbnail
-                newBook.status = receivedBook.status
-
+                let newBook: Book = mapper.map(from: receivedBook, context: context)
                 let newMyBook = MyBook(context: context)
                 newMyBook.book = newBook
                 newMyBook.savedAt = now
@@ -149,6 +136,76 @@ final class BookLocalDataSource {
             } catch {
                 completable(.error(CoreDataError.deleteFail))
             }
+            return Disposables.create()
+        }
+    }
+
+    func addRecentBook(_ book: BookEntity) -> Completable {
+        Completable.create { [weak self] completable in
+            guard let self else {
+                completable(.error(CoreDataError.unknowned))
+                return Disposables.create()
+            }
+
+            let now = Date()
+            let context = persistenceController.context
+
+            // 동일한 ISBN이 있는지 확인
+            let fetchRequest: NSFetchRequest<RecentlyViewedBook> = RecentlyViewedBook.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "book.isbn == %@", book.isbn)
+
+            do {
+                let results = try context.fetch(fetchRequest)
+
+                let entity: RecentlyViewedBook
+
+                if let existing = results.first {
+                    // 이미 존재하는 경우 -> 업데이트
+                    entity = existing
+                } else {
+                    // 존재하지 않으면 새로 생성
+                    entity = RecentlyViewedBook(context: context)
+                    entity.book = mapper.map(from: book, context: context)
+                }
+
+                // viewedAt 갱신
+                entity.viewedAt = now
+
+                try context.save()
+                completable(.completed)
+
+            } catch {
+                completable(.error(CoreDataError.saveFail))
+            }
+
+            return Disposables.create()
+        }
+    }
+
+    func fetchRecentBooks() -> Observable<[BookEntity]> {
+        Observable.create { [weak self] observer in
+            guard let self else {
+                observer.onError(CoreDataError.unknowned)
+                return Disposables.create()
+            }
+
+            let context = persistenceController.context
+            let request: NSFetchRequest<RecentlyViewedBook> = RecentlyViewedBook.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "viewedAt", ascending: false)]
+            request.fetchLimit = 10
+
+            do {
+                let result = try context.fetch(request)
+                let entities = result.compactMap { [weak self] book -> BookEntity? in
+                    guard let self else { return nil }
+                    return mapper.map(from: book)
+                }
+                observer.onNext(entities)
+                observer.onCompleted()
+            } catch {
+                observer.onError(CoreDataError.fetchFail)
+            }
+
             return Disposables.create()
         }
     }

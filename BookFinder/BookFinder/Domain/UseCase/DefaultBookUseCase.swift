@@ -40,4 +40,12 @@ final class DefaultBookUseCase: BookUseCase {
     func deleteBook(isbn: String) -> Completable {
         bookRepository.deleteBook(isbn: isbn)
     }
+
+    func addRecentBook(_ book: BookEntity) -> Completable {
+        bookRepository.addRecentBook(book)
+    }
+
+    func fetchRecentBooks() -> Observable<[BookEntity]> {
+        bookRepository.fetchRecentBooks()
+    }
 }

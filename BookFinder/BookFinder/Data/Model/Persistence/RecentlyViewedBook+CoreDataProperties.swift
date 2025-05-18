@@ -17,7 +17,6 @@ extension RecentlyViewedBook {
 
     @NSManaged public var viewedAt: Date
     @NSManaged public var book: Book
-
 }
 
 extension RecentlyViewedBook : Identifiable {}

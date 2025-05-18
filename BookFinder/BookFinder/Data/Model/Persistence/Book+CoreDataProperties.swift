@@ -24,7 +24,7 @@ extension Book {
     @NSManaged public var publisher: String
     @NSManaged public var translators: [String]?
     @NSManaged public var price: Int32
-    @NSManaged public var sale_price: Int32
+    @NSManaged public var salePrice: Int32
     @NSManaged public var thumbnail: String
     @NSManaged public var status: String
     @NSManaged public var myBooks: NSSet
