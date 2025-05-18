@@ -33,4 +33,9 @@ final class DefaultBookRepository: BookRepository {
     func saveMyBook(_ receivedBook: BookEntity) -> Bool {
         bookLocalDataSource.saveMyBook(receivedBook)
     }
+
+    func fetchMyBooks() -> Single<[MyBookEntity]> {
+        bookLocalDataSource.fetchMyBooks()
+    }
+
 }

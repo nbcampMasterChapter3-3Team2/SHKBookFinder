@@ -16,5 +16,6 @@ enum CoreDataError: Error {
     case saveFail
     case updateFail
     case deleteFail
+    case fetchFail
     case unknowned
 }

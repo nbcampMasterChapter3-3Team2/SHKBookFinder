@@ -28,4 +28,8 @@ final class DefaultBookUseCase: BookUseCase {
     func saveMyBook(_ receivedBook: BookEntity) -> Bool {
         bookRepository.saveMyBook(receivedBook)
     }
+
+    func fetchMyBooks() -> Single<[MyBookEntity]> {
+        bookRepository.fetchMyBooks()
+    }
 }

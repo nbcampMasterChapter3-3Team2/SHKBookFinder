@@ -5,6 +5,8 @@
 //  Created by kingj on 5/13/25.
 //
 
+import Foundation
+
 struct BookResponseMapper {
 
     // MARK: - Properties
@@ -27,6 +29,30 @@ struct BookResponseMapper {
             salePrice: response.salePrice,
             thumbnail: response.thumbnail,
             status: response.status
+        )
+    }
+
+    func map(from coreData: MyBook) -> MyBookEntity {
+        MyBookEntity(
+            book: map(from: coreData.book),
+            saveAt: coreData.savedAt
+        )
+    }
+
+    func map(from coreData: Book) -> BookEntity {
+        BookEntity(
+            title: coreData.title,
+            contents: coreData.contents,
+            url: coreData.url,
+            isbn: coreData.isbn,
+            datetime: coreData.datetime,
+            authors: coreData.authors,
+            publisher: coreData.publisher,
+            translators: coreData.translators,
+            price: Int(coreData.price),
+            salePrice: Int(coreData.sale_price),
+            thumbnail: coreData.thumbnail,
+            status: coreData.status
         )
     }
 }

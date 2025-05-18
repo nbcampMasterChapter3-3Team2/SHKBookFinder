@@ -15,6 +15,6 @@ extension DIContainer {
     }
 
     func makeMyBookViewModel() -> MyBookViewModel {
-        MyBookViewModel()
+        MyBookViewModel(bookUseCase: makeBookUseCase())
     }
 }

@@ -48,7 +48,12 @@ final class MyBookViewController: UIViewController {
         configureDelegate()
         configureDataSource()
         bind()
-        viewModel.action.accept(.viewDidLoad)
+        viewModel.action.accept(.fetchAllMyBooks)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.action.accept(.fetchAllMyBooks)
     }
 
     // MARK: - Hierarchy Helper
@@ -79,7 +84,8 @@ final class MyBookViewController: UIViewController {
 
     private func configureLayout() {
         tableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+            $0.directionalVerticalEdges.equalToSuperview()
         }
     }
 

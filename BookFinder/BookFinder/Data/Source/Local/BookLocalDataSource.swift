@@ -6,12 +6,15 @@
 //
 
 import CoreData
+import RxSwift
 
 final class BookLocalDataSource {
 
     // MARK: - Properties
 
     private let persistenceController: PersistenceController
+
+    private let mapper = BookResponseMapper.shared
 
     // MARK: - Initializer, Deinit, requiered
 
@@ -74,8 +77,34 @@ final class BookLocalDataSource {
             try context.save()
             return true
         } catch {
-            print("[Error] \(CoreDataError.unknowned)")
+            print("[Error] \(CoreDataError.saveFail)")
             return false
+        }
+    }
+
+    func fetchMyBooks() -> Single<[MyBookEntity]> {
+        Single.create { [weak self] observer in
+            guard let self else {
+                observer(.failure(CoreDataError.unknowned))
+                return Disposables.create()
+            }
+
+            let context = persistenceController.context
+            let request: NSFetchRequest<MyBook> = MyBook.fetchRequest()
+            request.sortDescriptors = [
+                NSSortDescriptor(key: "savedAt", ascending: false)
+            ]
+
+            do {
+                let entityResult = try context.fetch(MyBook.fetchRequest())
+                let dtoResult = entityResult
+                    .map { self.mapper.map(from: $0) }
+                observer(.success(dtoResult))
+            } catch {
+                observer(.failure(CoreDataError.fetchFail))
+            }
+
+            return Disposables.create()
         }
     }
 }
