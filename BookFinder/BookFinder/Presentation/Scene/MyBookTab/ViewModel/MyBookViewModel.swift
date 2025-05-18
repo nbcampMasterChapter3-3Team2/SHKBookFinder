@@ -14,7 +14,8 @@ enum MyBookAction {
 }
 
 struct MyBookState {
-    var myBooks = BehaviorRelay<[MyBookEntity]>(value: [])
+    var myBooksSubject = BehaviorRelay<[MyBookEntity]>(value: [])
+    var deleteAllSuccess = PublishRelay<Void>()
 }
 
 final class MyBookViewModel: ViewModelType {
@@ -44,16 +45,25 @@ final class MyBookViewModel: ViewModelType {
             case .fetchAllMyBooks:
                 fetchMyBooks()
             case .deleteAllButtonTapped:
+                deleteAllMyBooks()
             }
             // TODO: myBooks.accept([BookEntity])
         }
+    }
+
+    private func deleteAllMyBooks() {
+        bookUseCase.deleteAllMyBooks()
+            .subscribe { [weak self] result in
+                guard let self else { return }
+                state.deleteAllSuccess.accept(())
+            }.disposed(by: disposeBag)
     }
 
     private func fetchMyBooks() {
         bookUseCase.fetchMyBooks()
             .subscribe { [weak self] books in
                 guard let self else { return }
-                state.myBooks.accept(books)
+                state.myBooksSubject.accept(books)
             }.disposed(by: disposeBag)
     }
 }

@@ -81,7 +81,7 @@ final class MyBookViewController: UIViewController {
     // MARK: - Bind
 
     private func bind() {
-        viewModel.state.myBooks
+        viewModel.state.myBooksSubject
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self else { return }
@@ -93,8 +93,27 @@ final class MyBookViewController: UIViewController {
         deleteAllButton.rx.tap
             .bind { [weak self] in
                 guard let self else { return }
-                viewModel.action.accept(.deleteAllButtonTapped)
+                if viewModel.state.myBooksSubject.value.isEmpty {
+                    showAlert("책을 추가 해주세요")
+                } else {
+                    viewModel.action.accept(.deleteAllButtonTapped)
+                }
             }.disposed(by: disposeBag)
+
+        viewModel.state.deleteAllSuccess
+            .subscribe(onNext: { [weak self] in
+                guard let self else { return }
+                showAlert("전체 삭제 완료")
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+                    guard let self else { return }
+                    viewModel.action.accept(.fetchAllMyBooks)
+                }
+            }, onError: { [weak self] _ in
+                guard let self else { return }
+                showAlert("전체 삭제 실패")
+            }).disposed(by: disposeBag)
+
 
         // TODO: 스와이프 삭제
     }
@@ -106,8 +125,6 @@ final class MyBookViewController: UIViewController {
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
             $0.directionalVerticalEdges.equalToSuperview()
         }
-
-
     }
 
     // MARK: - Delegate Helper
@@ -147,5 +164,12 @@ extension MyBookViewController {
 
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+    }
+
+    private func showAlert(_ title: String) {
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        let close = UIAlertAction(title: "확인", style: .cancel)
+        alert.addAction(close)
+        self.present(alert, animated: true, completion: nil)
     }
 }

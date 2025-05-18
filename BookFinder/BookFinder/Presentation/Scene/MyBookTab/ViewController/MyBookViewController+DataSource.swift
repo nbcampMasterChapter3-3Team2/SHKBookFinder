@@ -16,7 +16,7 @@ extension MyBookViewController: UITableViewDataSource {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        viewModel.state.myBooks.value.count
+        viewModel.state.myBooksSubject.value.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -24,7 +24,7 @@ extension MyBookViewController: UITableViewDataSource {
             withIdentifier: MyBookCell.identifier
         ) as! MyBookCell
 
-        let book = viewModel.state.myBooks.value[indexPath.section].book
+        let book = viewModel.state.myBooksSubject.value[indexPath.section].book
         cell.configureComponent(with: book)
 
         return cell

@@ -11,4 +11,5 @@ protocol BookUseCase {
     func fetchSearchResult(query: String) -> Observable<[BookEntity]>
     func saveMyBook(_ receivedBook: BookEntity) -> Bool
     func fetchMyBooks() -> Single<[MyBookEntity]>
+    func deleteAllMyBooks() -> Completable
 }

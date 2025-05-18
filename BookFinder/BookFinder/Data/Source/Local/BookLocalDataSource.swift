@@ -107,4 +107,49 @@ final class BookLocalDataSource {
             return Disposables.create()
         }
     }
+
+    func deleteAllMyBooks() -> Completable {
+        Completable.create { [weak self] completable in
+            guard let self else {
+                completable(.error(CoreDataError.unknowned))
+                return Disposables.create()
+            }
+
+            let context = persistenceController.context
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = MyBook.fetchRequest()
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+            do {
+                try context.execute(deleteRequest)
+                try context.save()
+                completable(.completed)
+            } catch {
+                completable(.error(CoreDataError.deleteFail))
+            }
+            return Disposables.create()
+        }
+    }
+
+    func deleteBook(isbn: String) -> Completable {
+        Completable.create { [weak self] completable in
+            guard let self else {
+                completable(.error(CoreDataError.unknowned))
+                return Disposables.create()
+            }
+
+            let context = persistenceController.context
+            let request: NSFetchRequest<MyBook> = MyBook.fetchRequest()
+            request.predicate = NSPredicate(format: "isbn == %@", isbn)
+
+            do {
+                let results = try context.fetch(request)
+                results.forEach { context.delete($0) }
+                try context.save()
+                completable(.completed)
+            } catch {
+                completable(.error(CoreDataError.deleteFail))
+            }
+            return Disposables.create()
+        }
+    }
 }

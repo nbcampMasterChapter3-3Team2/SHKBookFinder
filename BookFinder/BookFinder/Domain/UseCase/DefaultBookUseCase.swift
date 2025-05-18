@@ -32,4 +32,8 @@ final class DefaultBookUseCase: BookUseCase {
     func fetchMyBooks() -> Single<[MyBookEntity]> {
         bookRepository.fetchMyBooks()
     }
+
+    func deleteAllMyBooks() -> Completable {
+        bookRepository.deleteAllMyBooks()
+    }
 }
