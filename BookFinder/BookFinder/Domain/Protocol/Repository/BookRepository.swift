@@ -12,4 +12,5 @@ protocol BookRepository {
     func saveMyBook(_ receivedBook: BookEntity) -> Bool
     func fetchMyBooks() -> Single<[MyBookEntity]>
     func deleteAllMyBooks() -> Completable
+    func deleteBook(isbn: String) -> Completable
 }

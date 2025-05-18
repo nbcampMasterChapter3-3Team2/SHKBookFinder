@@ -36,4 +36,8 @@ final class DefaultBookUseCase: BookUseCase {
     func deleteAllMyBooks() -> Completable {
         bookRepository.deleteAllMyBooks()
     }
+
+    func deleteBook(isbn: String) -> Completable {
+        bookRepository.deleteBook(isbn: isbn)
+    }
 }

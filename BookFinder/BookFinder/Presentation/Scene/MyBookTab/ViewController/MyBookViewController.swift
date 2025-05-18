@@ -20,10 +20,7 @@ final class MyBookViewController: UIViewController {
 
     // MARK: - UI Components
 
-    private let tableView = UITableView(frame: .zero, style: .plain).then {
-        $0.backgroundColor = .white
-        $0.register(MyBookCell.self, forCellReuseIdentifier: MyBookCell.identifier)
-    }
+    private let collectionView = MyBookCollectionView()
 
     private let deleteAllButton = UIButton(type: .system).then {
         $0.setTitle("전체 삭제", for: .normal)
@@ -73,7 +70,7 @@ final class MyBookViewController: UIViewController {
 
     private func configureHierarchy() {
         [
-            tableView
+            collectionView
         ]
             .forEach { view.addSubview($0) }
     }
@@ -85,7 +82,7 @@ final class MyBookViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] _ in
                 guard let self else { return }
-                tableView.reloadData()
+                collectionView.collectionView.reloadData()
             }, onError: { error in
                 print("[Error] MyBook \(error)")
             }).disposed(by: disposeBag)
@@ -121,8 +118,8 @@ final class MyBookViewController: UIViewController {
     // MARK: - Layout Helper
 
     private func configureLayout() {
-        tableView.snp.makeConstraints {
-            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+        collectionView.snp.makeConstraints {
+            $0.directionalHorizontalEdges.equalTo(view.safeAreaLayoutGuide)
             $0.directionalVerticalEdges.equalToSuperview()
         }
     }
@@ -130,13 +127,13 @@ final class MyBookViewController: UIViewController {
     // MARK: - Delegate Helper
 
     private func configureDelegate() {
-        tableView.delegate = self
+        collectionView.collectionView.delegate = self
     }
 
     // MARK: - DataSource Helper
 
     private func configureDataSource() {
-        tableView.dataSource = self
+        collectionView.collectionView.dataSource = self
     }
 }
 

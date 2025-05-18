@@ -41,4 +41,8 @@ final class DefaultBookRepository: BookRepository {
     func deleteAllMyBooks() -> Completable {
         bookLocalDataSource.deleteAllMyBooks()
     }
+
+    func deleteBook(isbn: String) -> Completable {
+        bookLocalDataSource.deleteBook(isbn: isbn)
+    }
 }

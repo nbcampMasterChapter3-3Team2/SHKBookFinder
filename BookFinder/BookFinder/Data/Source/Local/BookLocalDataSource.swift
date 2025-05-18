@@ -139,7 +139,7 @@ final class BookLocalDataSource {
 
             let context = persistenceController.context
             let request: NSFetchRequest<MyBook> = MyBook.fetchRequest()
-            request.predicate = NSPredicate(format: "isbn == %@", isbn)
+            request.predicate = NSPredicate(format: "book.isbn == %@", isbn)
 
             do {
                 let results = try context.fetch(request)

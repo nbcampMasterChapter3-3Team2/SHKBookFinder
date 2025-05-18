@@ -11,6 +11,7 @@ import RxRelay
 enum MyBookAction {
     case fetchAllMyBooks
     case deleteAllButtonTapped
+    case swipeToDeleteBook(isbn: String)
 }
 
 struct MyBookState {
@@ -46,9 +47,19 @@ final class MyBookViewModel: ViewModelType {
                 fetchMyBooks()
             case .deleteAllButtonTapped:
                 deleteAllMyBooks()
+            case .swipeToDeleteBook(isbn: let isbn):
+                deleteBook(isbn: isbn)
             }
             // TODO: myBooks.accept([BookEntity])
         }
+    }
+
+    private func deleteBook(isbn: String) {
+        bookUseCase.deleteBook(isbn: isbn)
+            .subscribe { [weak self] in
+                guard let self else { return }
+                print("Secces !!!")
+            }.disposed(by: disposeBag)
     }
 
     private func deleteAllMyBooks() {

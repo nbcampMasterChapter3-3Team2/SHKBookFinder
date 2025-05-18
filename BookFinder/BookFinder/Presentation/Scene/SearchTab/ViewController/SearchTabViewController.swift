@@ -27,7 +27,7 @@ final class SearchTabViewController: UIViewController {
         $0.searchBarStyle = .minimal
     }
 
-    private let collectionView = CollectionView()
+    private let collectionView = SearchCollectionView()
 
     // MARK: - Initializer, Deinit, requiered
 

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class CollectionView: UIView {
+final class SearchCollectionView: UIView {
     
     // MARK: - UI Components
 

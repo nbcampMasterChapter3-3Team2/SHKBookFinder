@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class MyBookCell: UITableViewCell {
+class MyBookCell: UICollectionViewCell {
 
     // MARK: - Properties
 
@@ -42,8 +42,8 @@ class MyBookCell: UITableViewCell {
 
     // MARK: - Initializer, Deinit, requiered
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         configureHierarchy()
         configureLayout()
     }
