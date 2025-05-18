@@ -30,6 +30,21 @@ final class DefaultBookRepository: BookRepository {
             }
     }
 
+    func fetchSearchResultByPage(query: String, page: Int) -> Single<(books: [BookEntity], isEnd: Bool)> {
+        bookDataSource.fetchSearchResultByPage(query: query, page: page)
+            .map { [weak self] response in
+                guard let self = self else {
+                    return ([], response.meta.isEnd)
+                }
+
+                let books: [BookEntity] = response.documents.compactMap { [weak self] book in
+                    return self?.mapper.map(from: book)
+                }
+
+                return (books, response.meta.isEnd)
+            }
+    }
+
     func saveMyBook(_ receivedBook: BookEntity) -> Bool {
         bookLocalDataSource.saveMyBook(receivedBook)
     }

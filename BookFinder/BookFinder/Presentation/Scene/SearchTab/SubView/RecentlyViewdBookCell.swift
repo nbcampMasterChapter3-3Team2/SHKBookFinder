@@ -32,12 +32,6 @@ final class RecentlyViewdBookCell: UICollectionViewCell {
         super.init(coder: coder)
     }
 
-//    // MARK: - Style Helper
-//
-//    private func configureStyle() {
-//        imageView.backgroundColor = .white
-//    }
-
     // MARK: - Hierarchy Helper
 
     private func configureHierarchy() {

@@ -10,10 +10,13 @@ import RxRelay
 
 final class SearchTabViewModel: ViewModelType {
 
+    // MARK: - Action & State
+
     enum Action {
         case viewDidLoad
         case searchBookButtonTapped(String)
         case bookResultCellTapped(BookEntity)
+        case loadNextPage
     }
 
     struct State {
@@ -21,12 +24,16 @@ final class SearchTabViewModel: ViewModelType {
         let selectedBookSubject = PublishRelay<BookEntity>()
         let collectionViewSection = BehaviorRelay<[Section]>(value: [.searchResult])
         let recentBooksSubject = BehaviorRelay<[BookEntity]>(value: [])
+        var isEnd: Bool = false
+        var currentPage: Int = 1
+        var currentQuery: String = ""
     }
 
     // MARK: - Properties
 
     private let bookUseCase: BookUseCase
     private let disposeBag = DisposeBag()
+
     var action = PublishRelay<Action>()
     var state = State()
 
@@ -49,12 +56,39 @@ final class SearchTabViewModel: ViewModelType {
                 fetchRecentBooks()
                 configureSection()
             case .searchBookButtonTapped(let query):
-                fetchSearchBookResult(quary: query)
+                fetchSearchBookResult(query: query)
             case .bookResultCellTapped(let book):
                 bookResultCellTapped(book)
                 configureSection()
+            case .loadNextPage:
+                fetchNextPage()
             }
         }.disposed(by: disposeBag)
+    }
+
+    private func fetchNextPage() {
+        guard !state.isEnd else { return }
+
+        let query = state.currentQuery
+        let nextPage = state.currentPage + 1
+
+        bookUseCase.fetchSearchResultByPage(query: query, page: nextPage)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] (newBooks, isEnd) in
+                guard let self else { return }
+
+                // 기존 값 + 새 페이지 결과 합치기
+                let updatedBooks = self.state.bookResultSubject.value + newBooks
+                self.state.bookResultSubject.accept(updatedBooks)
+
+                // 페이징 상태 업데이트
+                self.state.currentPage = nextPage
+                self.state.isEnd = isEnd
+
+            }, onFailure: { error in
+                print("[Error] Fetch Next Page: \(error.localizedDescription)")
+            })
+            .disposed(by: disposeBag)
     }
 
     private func configureSection() {
@@ -92,11 +126,31 @@ final class SearchTabViewModel: ViewModelType {
             }).disposed(by: disposeBag)
     }
 
-    private func fetchSearchBookResult(quary: String) {
-        bookUseCase.fetchSearchResult(query: quary)
-            .subscribe { [weak self] books in
+    private func fetchSearchBookResult(query: String) {
+        // TODO: 결과 체크 
+//        bookUseCase.fetchSearchResult(query: quary)
+//            .subscribe { [weak self] books in
+//                guard let self else { return }
+//                state.bookResultSubject.accept(books)
+//            }.disposed(by: disposeBag)
+
+        // 상태 초기화
+        state.currentPage = 1
+        state.isEnd = false
+        state.currentQuery = query
+        state.bookResultSubject.accept([]) // 이전 검색 결과 초기화
+
+        // 첫 페이지 검색
+        bookUseCase.fetchSearchResultByPage(query: query, page: 1)
+            .observe(on: MainScheduler.instance)
+            .subscribe(onSuccess: { [weak self] (books, isEnd) in
                 guard let self else { return }
                 state.bookResultSubject.accept(books)
-            }.disposed(by: disposeBag)
+                state.isEnd = isEnd
+
+                print(books)
+            }, onFailure: { error in
+                print("[Error] Search Book by Page: \(error.localizedDescription)")
+            }).disposed(by: disposeBag)
     }
 }

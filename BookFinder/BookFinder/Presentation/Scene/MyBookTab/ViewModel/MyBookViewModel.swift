@@ -9,6 +9,8 @@ import Foundation
 import RxSwift
 import RxRelay
 
+// MARK: - Action & State
+
 enum MyBookAction {
     case fetchAllMyBooks
     case deleteAllButtonTapped

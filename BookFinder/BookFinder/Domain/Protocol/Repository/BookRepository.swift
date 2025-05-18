@@ -9,6 +9,7 @@ import RxSwift
 
 protocol BookRepository {
     func fetchSearchResult(query: String) -> Single<[BookEntity]>
+    func fetchSearchResultByPage(query: String, page: Int) -> Single<(books: [BookEntity], isEnd: Bool)>
     func saveMyBook(_ receivedBook: BookEntity) -> Bool
     func fetchMyBooks() -> Single<[MyBookEntity]>
     func deleteAllMyBooks() -> Completable

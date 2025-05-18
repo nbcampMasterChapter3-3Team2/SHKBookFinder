@@ -8,11 +8,16 @@
 import CoreData
 
 final class PersistenceController {
+
+    // MARK: - Properties
+
     let container: NSPersistentContainer
 
     var context: NSManagedObjectContext {
         container.viewContext
     }
+
+    // MARK: - Initializer, Deinit, requiered
 
     init() {
         container = NSPersistentContainer(name: "BookFinder")
@@ -22,6 +27,8 @@ final class PersistenceController {
             }
         }
     }
+
+    // MARK: - Methods
 
     func saveContext() {
         let context = container.viewContext

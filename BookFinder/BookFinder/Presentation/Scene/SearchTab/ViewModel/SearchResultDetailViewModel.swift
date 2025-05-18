@@ -8,6 +8,8 @@
 import RxSwift
 import RxRelay
 
+// MARK: - Action & State
+
 enum DetailViewAction {
     case bindSelectedBook(BookEntity)
     case closeTapped

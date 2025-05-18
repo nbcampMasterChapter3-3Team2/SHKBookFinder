@@ -112,10 +112,29 @@ final class SearchTabViewController: UIViewController {
                 searchViewModel.action.accept(.searchBookButtonTapped(quary))
             }).disposed(by: disposeBag)
 
+        // TODO: [Refactor] CollectionView Rx 로 변경
+//        collectionView.collectionView.rx.didScroll
+//            .filter { [weak self] in
+//                guard let self else { return false }
+//                print("scrolled !!!!")
+//                return shouldLoadNextPage()
+//            }
+//            .map { SearchTabViewModel.Action.loadNextPage }
+//            .bind(to: searchViewModel.action)
+//            .disposed(by: disposeBag)
+
         // TODO: [Refactor] CollectionView Cell - 클릭된 셀의 Book 모델 전송
 //        collectionView.collectionView.rx.modelSelected(BookEntity.self)
 //            .bind(to: viewModel.selectedBook)
 //            .disposed(by: disposeBag)
+    }
+
+    private func shouldLoadNextPage() -> Bool {
+        let collectionView = collectionView.collectionView
+        let offsetY = collectionView.contentOffset.y
+        let contentHeight = collectionView.contentSize.height
+        let height = collectionView.frame.size.height
+        return offsetY > contentHeight - height * 1.5
     }
 
 
