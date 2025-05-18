@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 import RxSwift
+import RxCocoa
 
 final class MyBookViewController: UIViewController {
 
@@ -22,6 +23,18 @@ final class MyBookViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain).then {
         $0.backgroundColor = .white
         $0.register(MyBookCell.self, forCellReuseIdentifier: MyBookCell.identifier)
+    }
+
+    private let deleteAllButton = UIButton(type: .system).then {
+        $0.setTitle("전체 삭제", for: .normal)
+        $0.setTitleColor(.gray, for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+    }
+
+    private let addBookButton = UIButton(type: .system).then {
+        $0.setTitle("추가", for: .normal)
+        $0.setTitleColor(.systemOrange, for: .normal)
+        $0.titleLabel?.font = .boldSystemFont(ofSize: 15)
     }
 
     // MARK: - Initializer, Deinit, requiered
@@ -77,6 +90,12 @@ final class MyBookViewController: UIViewController {
                 print("[Error] MyBook \(error)")
             }).disposed(by: disposeBag)
 
+        deleteAllButton.rx.tap
+            .bind { [weak self] in
+                guard let self else { return }
+                viewModel.action.accept(.deleteAllButtonTapped)
+            }.disposed(by: disposeBag)
+
         // TODO: 스와이프 삭제
     }
 
@@ -87,6 +106,8 @@ final class MyBookViewController: UIViewController {
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
             $0.directionalVerticalEdges.equalToSuperview()
         }
+
+
     }
 
     // MARK: - Delegate Helper
@@ -115,26 +136,10 @@ extension MyBookViewController {
     }
 
     private func configureBarButtonItem() {
-        let deleteAll = UIButton(type: .system)
-        deleteAll.setTitle("전체 삭제", for: .normal)
-        deleteAll.setTitleColor(.gray, for: .normal)
-        deleteAll.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-
-        // TODO: addTarget > Rx
-        deleteAll.addTarget(self, action: #selector(onTappedDeleteAll), for: .touchUpInside)
-
-        let leftBarButton = UIBarButtonItem(customView: deleteAll)
+        let leftBarButton = UIBarButtonItem(customView: deleteAllButton)
         self.navigationItem.leftBarButtonItem = leftBarButton
 
-        let addBook = UIButton(type: .system)
-        addBook.setTitle("추가", for: .normal)
-        addBook.setTitleColor(.systemOrange, for: .normal)
-        addBook.titleLabel?.font = .boldSystemFont(ofSize: 15)
-
-        // TODO: addTarget > Rx
-        addBook.addTarget(self, action: #selector(onTappedAddBook), for: .touchUpInside)
-
-        let rightBarButton = UIBarButtonItem(customView: addBook)
+        let rightBarButton = UIBarButtonItem(customView: addBookButton)
         self.navigationItem.rightBarButtonItem = rightBarButton
 
         let navBarAppearance = UINavigationBarAppearance()
@@ -142,17 +147,5 @@ extension MyBookViewController {
 
         navigationController?.navigationBar.standardAppearance = navBarAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
-    }
-
-    // MARK: - @objc Methods
-
-    @objc
-    private func onTappedDeleteAll() {
-        print("delete all")
-    }
-
-    @objc
-    private func onTappedAddBook() {
-        print("add book")
     }
 }

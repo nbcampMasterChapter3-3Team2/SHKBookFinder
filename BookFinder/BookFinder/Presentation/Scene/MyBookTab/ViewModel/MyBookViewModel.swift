@@ -10,6 +10,7 @@ import RxRelay
 
 enum MyBookAction {
     case fetchAllMyBooks
+    case deleteAllButtonTapped
 }
 
 struct MyBookState {
@@ -42,6 +43,7 @@ final class MyBookViewModel: ViewModelType {
             switch action {
             case .fetchAllMyBooks:
                 fetchMyBooks()
+            case .deleteAllButtonTapped:
             }
             // TODO: myBooks.accept([BookEntity])
         }
