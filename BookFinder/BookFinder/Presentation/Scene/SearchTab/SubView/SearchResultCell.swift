@@ -29,7 +29,7 @@ final class SearchResultCell: UICollectionViewCell {
 
     private var authorLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 13)
-        $0.numberOfLines = 0
+        $0.numberOfLines = 2
         $0.lineBreakMode = .byTruncatingTail
         $0.textAlignment = .right
         $0.textColor = .gray
