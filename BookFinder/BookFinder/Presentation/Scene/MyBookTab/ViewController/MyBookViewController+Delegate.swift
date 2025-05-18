@@ -7,23 +7,24 @@
 
 import UIKit
 
-extension MyBookViewController: UICollectionViewDelegate {
+extension MyBookViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
 
-//    func tableView(
-//        _ tableView: UITableView,
-//        commit editingStyle: UITableViewCell.EditingStyle,
-//        forRowAt indexPath: IndexPath
-//    ) {
-//        if editingStyle == .delete {
-//            let books = viewModel.state.myBooksSubject.value
-//            let isbn = books[indexPath.section].book.isbn
-//            viewModel.action.accept(.swipeToDeleteBook(isbn: isbn))
-//
-//            tableView.deleteSections(IndexSet(integer: indexPath.section), with: .automatic)
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-//        "삭제하기"
-//    }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.contentView.backgroundColor = .clear
+    }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
+            guard let self else { return }
+            let isbn = self.viewModel.state.myBooksSubject.value[indexPath.row].book.isbn
+            self.viewModel.action.accept(.swipeToDeleteBook(isbn: isbn))
+            completion(true)
+        }
+        deleteAction.backgroundColor = .systemRed
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }

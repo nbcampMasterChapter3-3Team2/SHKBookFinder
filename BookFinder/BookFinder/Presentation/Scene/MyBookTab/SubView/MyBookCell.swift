@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-class MyBookCell: UICollectionViewCell {
+class MyBookCell: UITableViewCell {
 
     // MARK: - Properties
 
@@ -42,8 +42,8 @@ class MyBookCell: UICollectionViewCell {
 
     // MARK: - Initializer, Deinit, requiered
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureHierarchy()
         configureLayout()
     }
@@ -97,5 +97,19 @@ class MyBookCell: UICollectionViewCell {
         formatter.numberStyle = .decimal
         guard let price = formatter.string(from: NSNumber(value: book.price)) else { return }
         self.priceLabel.text = "₩" + price
+    }
+}
+
+extension MyBookCell {
+    func setCardStyle() {
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.05
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.shadowRadius = 3
+        clipsToBounds = false
     }
 }

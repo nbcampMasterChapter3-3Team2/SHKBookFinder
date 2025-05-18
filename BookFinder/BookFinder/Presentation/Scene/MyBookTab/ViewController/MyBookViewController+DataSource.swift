@@ -7,17 +7,17 @@
 
 import UIKit
 
-extension MyBookViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.state.myBooksSubject.value.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBookCell.identifier, for: indexPath) as! MyBookCell
-
-        let book = viewModel.state.myBooksSubject.value[indexPath.item].book
-        cell.configureComponent(with: book)
-
-        return cell
-    }
-}
+//extension MyBookViewController: UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        viewModel.state.myBooksSubject.value.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyBookCell.identifier, for: indexPath) as! MyBookCell
+//
+//        let book = viewModel.state.myBooksSubject.value[indexPath.item].book
+//        cell.configureComponent(with: book)
+//
+//        return cell
+//    }
+//}

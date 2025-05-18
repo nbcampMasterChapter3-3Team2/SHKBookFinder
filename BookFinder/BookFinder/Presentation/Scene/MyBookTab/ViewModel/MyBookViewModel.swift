@@ -5,6 +5,7 @@
 //  Created by kingj on 5/17/25.
 //
 
+import Foundation
 import RxSwift
 import RxRelay
 
@@ -50,7 +51,6 @@ final class MyBookViewModel: ViewModelType {
             case .swipeToDeleteBook(isbn: let isbn):
                 deleteBook(isbn: isbn)
             }
-            // TODO: myBooks.accept([BookEntity])
         }
     }
 
@@ -58,7 +58,10 @@ final class MyBookViewModel: ViewModelType {
         bookUseCase.deleteBook(isbn: isbn)
             .subscribe { [weak self] in
                 guard let self else { return }
-                print("Secces !!!")
+                let updated = state.myBooksSubject.value.filter {
+                    $0.book.isbn != isbn
+                }
+                state.myBooksSubject.accept(updated)
             }.disposed(by: disposeBag)
     }
 

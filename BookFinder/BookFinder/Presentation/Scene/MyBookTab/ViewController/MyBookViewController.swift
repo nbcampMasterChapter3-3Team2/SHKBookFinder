@@ -20,7 +20,12 @@ final class MyBookViewController: UIViewController {
 
     // MARK: - UI Components
 
-    private let collectionView = MyBookCollectionView()
+    private let tableView = UITableView(frame: .zero, style: .plain).then {
+        $0.register(MyBookCell.self, forCellReuseIdentifier: MyBookCell.identifier)
+        $0.separatorStyle = .none
+        $0.backgroundColor = .white
+        $0.showsVerticalScrollIndicator = false
+    }
 
     private let deleteAllButton = UIButton(type: .system).then {
         $0.setTitle("전체 삭제", for: .normal)
@@ -56,7 +61,6 @@ final class MyBookViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureDelegate()
-        configureDataSource()
         bind()
         viewModel.action.accept(.fetchAllMyBooks)
     }
@@ -70,7 +74,7 @@ final class MyBookViewController: UIViewController {
 
     private func configureHierarchy() {
         [
-            collectionView
+            tableView
         ]
             .forEach { view.addSubview($0) }
     }
@@ -79,46 +83,45 @@ final class MyBookViewController: UIViewController {
 
     private func bind() {
         viewModel.state.myBooksSubject
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] _ in
+            .bind(to: tableView.rx.items(
+                cellIdentifier: MyBookCell.identifier,
+                cellType: MyBookCell.self)
+            ) { _, item, cell in
+                cell.configureComponent(with: item.book)
+                cell.selectionStyle = .none
+                cell.setCardStyle()
+            }.disposed(by: disposeBag)
+
+        tableView.rx.itemDeleted
+            .bind { [weak self] indexPath in
                 guard let self else { return }
-                collectionView.collectionView.reloadData()
-            }, onError: { error in
-                print("[Error] MyBook \(error)")
-            }).disposed(by: disposeBag)
+                let isbn = self.viewModel.state.myBooksSubject.value[indexPath.row].book.isbn
+                self.viewModel.action.accept(.swipeToDeleteBook(isbn: isbn))
+            }.disposed(by: disposeBag)
 
         deleteAllButton.rx.tap
             .bind { [weak self] in
                 guard let self else { return }
-                if viewModel.state.myBooksSubject.value.isEmpty {
-                    showAlert("책을 추가 해주세요")
+                if self.viewModel.state.myBooksSubject.value.isEmpty {
+                    self.showAlert("책을 추가 해주세요")
                 } else {
-                    viewModel.action.accept(.deleteAllButtonTapped)
+                    self.viewModel.action.accept(.deleteAllButtonTapped)
                 }
             }.disposed(by: disposeBag)
 
         viewModel.state.deleteAllSuccess
             .subscribe(onNext: { [weak self] in
-                guard let self else { return }
-                showAlert("전체 삭제 완료")
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-                    guard let self else { return }
-                    viewModel.action.accept(.fetchAllMyBooks)
+                self?.showAlert("전체 삭제 완료")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self?.viewModel.action.accept(.fetchAllMyBooks)
                 }
-            }, onError: { [weak self] _ in
-                guard let self else { return }
-                showAlert("전체 삭제 실패")
             }).disposed(by: disposeBag)
-
-
-        // TODO: 스와이프 삭제
     }
 
     // MARK: - Layout Helper
 
     private func configureLayout() {
-        collectionView.snp.makeConstraints {
+        tableView.snp.makeConstraints {
             $0.directionalHorizontalEdges.equalTo(view.safeAreaLayoutGuide)
             $0.directionalVerticalEdges.equalToSuperview()
         }
@@ -127,13 +130,7 @@ final class MyBookViewController: UIViewController {
     // MARK: - Delegate Helper
 
     private func configureDelegate() {
-        collectionView.collectionView.delegate = self
-    }
-
-    // MARK: - DataSource Helper
-
-    private func configureDataSource() {
-        collectionView.collectionView.dataSource = self
+        tableView.delegate = self
     }
 }
 

@@ -20,6 +20,7 @@ final class MyBookCollectionView: UIView {
         collectionView.register(MyBookCell.self, forCellWithReuseIdentifier: MyBookCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isUserInteractionEnabled = true
         return collectionView
     }()
 
