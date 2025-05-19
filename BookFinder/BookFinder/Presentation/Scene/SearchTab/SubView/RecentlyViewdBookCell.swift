@@ -16,6 +16,7 @@ final class RecentlyViewdBookCell: UICollectionViewCell {
 
     private let imageView = UIImageView().then {
         $0.layer.cornerRadius = 70 / 2
+        $0.contentMode = .scaleAspectFill
     }
 
     // MARK: - Initializer, Deinit, requiered
@@ -31,12 +32,6 @@ final class RecentlyViewdBookCell: UICollectionViewCell {
         super.init(coder: coder)
     }
 
-    // MARK: - Style Helper
-
-    private func configureStyle() {
-        imageView.backgroundColor = .white
-    }
-
     // MARK: - Hierarchy Helper
 
     private func configureHierarchy() {
@@ -47,7 +42,24 @@ final class RecentlyViewdBookCell: UICollectionViewCell {
 
     private func configureLayout() {
         imageView.snp.makeConstraints {
+            $0.size.equalTo(70)
             $0.edges.equalToSuperview()
+        }
+    }
+
+    // MARK: - Methods
+
+    func configureComponent(with book: BookEntity) {
+        guard let url = URL(string: book.thumbnail) else { return }
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self else { return }
+                        self.imageView.image = image
+                    }
+                }
+            }
         }
     }
 }

@@ -24,4 +24,32 @@ final class DefaultBookUseCase: BookUseCase {
     func fetchSearchResult(query: String) -> Observable<[BookEntity]> {
         bookRepository.fetchSearchResult(query: query).asObservable()
     }
+
+    func fetchSearchResultByPage(query: String, page: Int) -> Single<(books: [BookEntity], isEnd: Bool)> {
+        bookRepository.fetchSearchResultByPage(query: query, page: page)
+    }
+
+    func saveMyBook(_ receivedBook: BookEntity) -> Bool {
+        bookRepository.saveMyBook(receivedBook)
+    }
+
+    func fetchMyBooks() -> Single<[MyBookEntity]> {
+        bookRepository.fetchMyBooks()
+    }
+
+    func deleteAllMyBooks() -> Completable {
+        bookRepository.deleteAllMyBooks()
+    }
+
+    func deleteBook(isbn: String) -> Completable {
+        bookRepository.deleteBook(isbn: isbn)
+    }
+
+    func addRecentBook(_ book: BookEntity) -> Completable {
+        bookRepository.addRecentBook(book)
+    }
+
+    func fetchRecentBooks() -> Observable<[BookEntity]> {
+        bookRepository.fetchRecentBooks()
+    }
 }

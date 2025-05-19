@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 
 final class SearchTabViewController: UIViewController {
-    
+
     // MARK: - Properties
 
     let searchViewModel: SearchTabViewModel
@@ -27,7 +27,7 @@ final class SearchTabViewController: UIViewController {
         $0.searchBarStyle = .minimal
     }
 
-    private let collectionView = CollectionView()
+    private let collectionView = SearchCollectionView()
 
     // MARK: - Initializer, Deinit, requiered
 
@@ -53,6 +53,7 @@ final class SearchTabViewController: UIViewController {
         configureLayout()
         configureDelegate()
         configureDataSource()
+        searchViewModel.action.accept(.viewDidLoad)
         dissmissKeyboardTapGesture()
     }
 
@@ -79,7 +80,6 @@ final class SearchTabViewController: UIViewController {
             }).disposed(by: disposeBag)
 
         searchViewModel.state.selectedBookSubject
-        // TODO: Thread 확인
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] book in
                 guard let self else { return }
@@ -91,6 +91,17 @@ final class SearchTabViewController: UIViewController {
                 print("[Error] Selected Book 전달: \(error)")
             }).disposed(by: disposeBag)
 
+        searchViewModel.state.collectionViewSection
+            .subscribe(onNext: { [weak self] sections in
+                guard let self else { return }
+                collectionView.sections = sections
+            }).disposed(by: disposeBag)
+
+        searchViewModel.state.recentBooksSubject
+            .subscribe(onNext: { [weak self] recentBooks in
+                guard let self else { return }
+                collectionView.collectionView.reloadData()
+            }).disposed(by: disposeBag)
 
         searchBar.rx.text
             .orEmpty
@@ -101,10 +112,29 @@ final class SearchTabViewController: UIViewController {
                 searchViewModel.action.accept(.searchBookButtonTapped(quary))
             }).disposed(by: disposeBag)
 
+        // TODO: [Refactor] CollectionView Rx 로 변경
+//        collectionView.collectionView.rx.didScroll
+//            .filter { [weak self] in
+//                guard let self else { return false }
+//                print("scrolled !!!!")
+//                return shouldLoadNextPage()
+//            }
+//            .map { SearchTabViewModel.Action.loadNextPage }
+//            .bind(to: searchViewModel.action)
+//            .disposed(by: disposeBag)
+
         // TODO: [Refactor] CollectionView Cell - 클릭된 셀의 Book 모델 전송
 //        collectionView.collectionView.rx.modelSelected(BookEntity.self)
 //            .bind(to: viewModel.selectedBook)
 //            .disposed(by: disposeBag)
+    }
+
+    private func shouldLoadNextPage() -> Bool {
+        let collectionView = collectionView.collectionView
+        let offsetY = collectionView.contentOffset.y
+        let contentHeight = collectionView.contentSize.height
+        let height = collectionView.frame.size.height
+        return offsetY > contentHeight - height * 1.5
     }
 
 
@@ -154,5 +184,4 @@ final class SearchTabViewController: UIViewController {
         searchBar.resignFirstResponder()
         searchBar.setShowsCancelButton(false, animated: true)
     }
-
 }

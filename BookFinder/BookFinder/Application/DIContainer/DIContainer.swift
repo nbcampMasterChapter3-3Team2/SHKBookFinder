@@ -8,5 +8,5 @@
 import UIKit
 
 final class DIContainer {
-    
+    let persistenceController = PersistenceController()
 }

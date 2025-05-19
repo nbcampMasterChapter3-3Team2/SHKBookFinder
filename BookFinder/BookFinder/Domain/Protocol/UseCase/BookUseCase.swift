@@ -9,4 +9,11 @@ import RxSwift
 
 protocol BookUseCase {
     func fetchSearchResult(query: String) -> Observable<[BookEntity]>
+    func fetchSearchResultByPage(query: String, page: Int) -> Single<(books: [BookEntity], isEnd: Bool)>
+    func saveMyBook(_ receivedBook: BookEntity) -> Bool
+    func fetchMyBooks() -> Single<[MyBookEntity]>
+    func deleteAllMyBooks() -> Completable
+    func deleteBook(isbn: String) -> Completable
+    func addRecentBook(_ book: BookEntity) -> Completable
+    func fetchRecentBooks() -> Observable<[BookEntity]>
 }

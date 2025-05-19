@@ -1,19 +1,19 @@
 //
-//  SearchResultCell.swift
+//  MyBookCell.swift
 //  BookFinder
 //
-//  Created by kingj on 5/12/25.
+//  Created by kingj on 5/17/25.
 //
 
 import UIKit
-import Then
 import SnapKit
+import Then
 
-final class SearchResultCell: UICollectionViewCell {
+class MyBookCell: UITableViewCell {
 
     // MARK: - Properties
 
-    static let identifier = "SearchResultCell"
+    static let identifier = "MyBookCell"
 
     // MARK: - UI Components
 
@@ -42,14 +42,14 @@ final class SearchResultCell: UICollectionViewCell {
 
     // MARK: - Initializer, Deinit, requiered
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureHierarchy()
         configureLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
 
     // MARK: - Hierarchy Helper
@@ -97,5 +97,19 @@ final class SearchResultCell: UICollectionViewCell {
         formatter.numberStyle = .decimal
         guard let price = formatter.string(from: NSNumber(value: book.price)) else { return }
         self.priceLabel.text = "₩" + price
+    }
+}
+
+extension MyBookCell {
+    func setCardStyle() {
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.05
+        layer.shadowOffset = CGSize(width: 0, height: 1)
+        layer.shadowRadius = 3
+        clipsToBounds = false
     }
 }

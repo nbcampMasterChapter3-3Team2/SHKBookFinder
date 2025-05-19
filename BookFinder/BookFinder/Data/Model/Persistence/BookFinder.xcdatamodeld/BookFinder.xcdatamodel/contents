@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D70" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Book" representedClassName="Book" syncable="YES">
+        <attribute name="authors" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="contents" attributeType="String"/>
+        <attribute name="datetime" attributeType="String"/>
+        <attribute name="isbn" attributeType="String"/>
+        <attribute name="price" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="publisher" attributeType="String"/>
+        <attribute name="salePrice" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="status" attributeType="String"/>
+        <attribute name="thumbnail" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="translators" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="url" attributeType="String"/>
+        <relationship name="myBooks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MyBook" inverseName="book" inverseEntity="MyBook"/>
+        <relationship name="recentlyViewdBooks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RecentlyViewedBook" inverseName="book" inverseEntity="RecentlyViewedBook"/>
+    </entity>
+    <entity name="MyBook" representedClassName="MyBook" syncable="YES">
+        <attribute name="savedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="myBooks" inverseEntity="Book"/>
+    </entity>
+    <entity name="RecentlyViewedBook" representedClassName="RecentlyViewedBook" syncable="YES">
+        <attribute name="viewedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="recentlyViewdBooks" inverseEntity="Book"/>
+    </entity>
 </model>

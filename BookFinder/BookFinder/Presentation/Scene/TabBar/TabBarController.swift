@@ -12,16 +12,16 @@ final class TabBarController: UITabBarController {
     // MARK: - Properties
 
     private let searchTabViewController: SearchTabViewController
-    private let bookListViewController: BookListViewController
+    private let myBookViewController: MyBookViewController
 
     // MARK: - Initializer, Deinit, requiered
 
     init(
         searchTabViewController: SearchTabViewController,
-        bookListViewController: BookListViewController
+        myBookViewController: MyBookViewController
     ) {
         self.searchTabViewController = searchTabViewController
-        self.bookListViewController = bookListViewController
+        self.myBookViewController = myBookViewController
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -67,7 +67,7 @@ final class TabBarController: UITabBarController {
             selectedImage: nil
         )
 
-        bookListViewController.tabBarItem = UITabBarItem(
+        myBookViewController.tabBarItem = UITabBarItem(
             title: "나의 책",
             image: UIImage(systemName: "books.vertical")?
                 .withRenderingMode(.alwaysTemplate),
@@ -77,7 +77,7 @@ final class TabBarController: UITabBarController {
 
         viewControllers = [
             UINavigationController(rootViewController: searchTabViewController),
-            UINavigationController(rootViewController: bookListViewController)
+            UINavigationController(rootViewController: myBookViewController)
         ]
     }
 }

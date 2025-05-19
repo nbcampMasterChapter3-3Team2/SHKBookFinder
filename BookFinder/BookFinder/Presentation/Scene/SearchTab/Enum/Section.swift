@@ -6,6 +6,9 @@
 //
 
 enum Section: Int, CaseIterable {
+
+    // MARK: - Properties
+
     case recentlyViewedBook
     case searchResult
 

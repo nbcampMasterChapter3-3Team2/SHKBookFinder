@@ -64,13 +64,13 @@ final class SearchResultDetailView: UIView {
         $0.distribution = .fillProportionally
     }
 
-    private let cancelButton = UIButton().then {
+    let closeButton = UIButton().then {
         $0.setTitle("X", for: .normal)
         $0.backgroundColor = .gray
         $0.layer.cornerRadius = 10
     }
 
-    private let addButton = UIButton().then {
+    let addButton = UIButton().then {
         $0.setTitle("담기", for: .normal)
         $0.backgroundColor = .systemGreen
         $0.layer.cornerRadius = 10
@@ -112,7 +112,7 @@ final class SearchResultDetailView: UIView {
             .forEach { contentStackView.addArrangedSubview($0) }
 
         [
-            cancelButton,
+            closeButton,
             addButton
         ]
             .forEach { buttonStackView.addArrangedSubview($0) }
@@ -159,7 +159,7 @@ final class SearchResultDetailView: UIView {
             $0.width.equalToSuperview().inset(20)
         }
 
-        cancelButton.snp.makeConstraints {
+        closeButton.snp.makeConstraints {
             $0.width.equalTo(addButton.snp.width).multipliedBy(0.5)
         }
     }

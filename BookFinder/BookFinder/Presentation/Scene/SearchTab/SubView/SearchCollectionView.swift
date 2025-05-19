@@ -8,14 +8,22 @@
 import UIKit
 import SnapKit
 
-final class CollectionView: UIView {
-    
+final class SearchCollectionView: UIView {
+
+    // MARK: - Properties
+
+    var sections: [Section] = [] {
+        didSet {
+            collectionView.setCollectionViewLayout(createCompositionalLayout(sections: sections), animated: true)
+        }
+    }
+
     // MARK: - UI Components
 
     lazy var collectionView = {
         let collectionView = UICollectionView(
             frame: .zero,
-            collectionViewLayout: createCompositionalLayout()
+            collectionViewLayout: createCompositionalLayout(sections: sections)
         )
         collectionView.register(RecentlyViewdBookCell.self, forCellWithReuseIdentifier: RecentlyViewdBookCell.identifier)
         collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: SearchResultCell.identifier)
@@ -55,16 +63,18 @@ final class CollectionView: UIView {
         }
     }
 
-    private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        UICollectionViewCompositionalLayout { sectionIndex, environment in
-            switch Section(rawValue: sectionIndex) {
-            case .recentlyViewedBook:
-                return self.createRecentlyViewedBookLayout(environment)
-            case .searchResult:
-                return self.createSearchResultLayout()
-            default:
-                return self.createSearchResultLayout()
+    private func createCompositionalLayout(sections: [Section]) -> UICollectionViewCompositionalLayout {
+        UICollectionViewCompositionalLayout { [weak self] sectionIndex, environment in
+            let section = sections[sectionIndex]
+
+            if section == .recentlyViewedBook {
+                return self?.createRecentlyViewedBookLayout(environment)
             }
+
+            if section == .searchResult {
+                return self?.createSearchResultLayout()
+            }
+            return self?.createSearchResultLayout()
         }
     }
 
@@ -88,7 +98,7 @@ final class CollectionView: UIView {
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(60)
+            heightDimension: .absolute(80)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
